@@ -21,5 +21,6 @@ public class Exercise_1_1_1 extends Exercise {
 
     @Override
     public void execute() {
+
     }
 }

@@ -27,19 +27,29 @@ public class Application {
 
         printExercises();
 
+        String lastChoice = "";
         while (true) {
-            System.out.print("Example to run [or q to exit]: ");
+            System.out.print("Example to run [" + lastChoice + "] (q quit, l list): ");
             String input = getInput();
 
+            if ("l".equalsIgnoreCase(input)) {
+                printExercises();
+            }
             if ("q".equalsIgnoreCase(input)) {
                 break;
             } else {
-                Reference reference = Reference.fromString(input);
+                Reference reference = Reference.fromString("".equals(input) ? lastChoice : input);
+                Exercise exercise = null;
+
                 if (reference != null) {
-                    Exercise exercise = exercises.get(reference);
-                    if (exercise != null) {
-                        exercise.execute();
-                    }
+                    exercise = exercises.get(reference);
+                }
+
+                if (exercise != null) {
+                    lastChoice = reference.toString();
+                    exercise.execute();
+                } else {
+                    lastChoice = "";
                 }
             }
         }
