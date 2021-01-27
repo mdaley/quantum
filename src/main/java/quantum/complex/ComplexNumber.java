@@ -11,12 +11,14 @@ public final class ComplexNumber {
         this.i = i;
     }
 
-    public static ComplexNumber fromString(String value) {
+    public static ComplexNumber fromString(String input) {
         double real = 0.0, imaginary = 0.0;
-
         boolean ok = true;
+
+        String value = normaliseInput(input);
+
         try {
-            if (value != null && value.length() > 0) {
+            if (value.length() > 0) {
                 String[] parts = value.split(" ");
 
                 if (parts.length == 1) {
@@ -25,7 +27,7 @@ public final class ComplexNumber {
                     } else {
                         real = Double.parseDouble(parts[0]);
                     }
-                } else if (parts.length == 3) {
+                } else if (parts.length == 3 && parts[2].endsWith("i")) {
                     real = Double.parseDouble(parts[0]);
                     imaginary = Double.parseDouble(parts[2].replace("i", ""));
                     boolean negative = "-".equals(parts[1]);
@@ -86,5 +88,38 @@ public final class ComplexNumber {
         } else {
             return r + " - " + i * -1.0 + "i";
         }
+    }
+
+    /**
+     * Make sure all spaces are removed apart from around +/- between the imaginary and complex parts.
+     * @param input the input complex number string
+     * @return the normalised form
+     */
+    private static String normaliseInput(String input) {
+        StringBuilder strb = new StringBuilder();
+
+        if (input != null) {
+            char previous = 'Z';
+            for (int i = 0; i < input.length(); i++) {
+                char c = input.charAt(i);
+                if (c != ' ') {
+                    if (c == '+' || c == '-') {
+                        if (previous == 'e' || i == 0) {
+                            strb.append(c);
+                        } else {
+                            strb.append(' ');
+                            strb.append(c);
+                            strb.append(' ');
+                        }
+                    } else {
+                        strb.append(c);
+                    }
+
+                    previous = c;
+                }
+            }
+        }
+
+        return strb.toString();
     }
 }

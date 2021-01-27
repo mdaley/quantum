@@ -1,6 +1,8 @@
 package quantum.complex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static quantum.complex.ComplexNumber.fromString;
 
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
@@ -47,14 +50,26 @@ public class ComplexNumberTest {
         assertEquals(new ComplexNumber(-2.5, 1.6), fromString("-2.5 + 1.6i"));
         assertEquals(new ComplexNumber(2.5, -1.6), fromString("2.5 - 1.6i"));
         assertEquals(new ComplexNumber(-2.5, -1.6), fromString("-2.5 - 1.6i"));
+
+        // exp form
+        assertEquals(new ComplexNumber(2.5e+34, 0.6e-10), fromString("2.5e+34 + .6e-10i"));
+
+        // no spaces
+        assertEquals(new ComplexNumber(2.5, 1.6), fromString("2.5+1.6i"));
+        assertEquals(new ComplexNumber(-2.5, 1.6), fromString("-2.5+1.6i"));
+        assertEquals(new ComplexNumber(-2.5, -1.6), fromString("-2.5-1.6i"));
+        assertEquals(new ComplexNumber(2.5e+34, 0.6e-10), fromString("2.5e+34+.6e-10i"));
+
+        // odd spaces
+        assertEquals(new ComplexNumber(2.5, 1.6), fromString("   2.5   +    1.6   i"));
+        assertEquals(new ComplexNumber(-2.5e+34, 0.6e-10), fromString("- 2.5 e +  34 + .  6 e  -10 i"));
     }
 
-    /*@Test
-    void creating_complex_number_from_string_can_throw() {
-        Exception thrown = assertThrows(IllegalArgumentException.class, () -> fromString("NaN"));
+    @ParameterizedTest
+    @ValueSource(strings = {"huh", "1.2 3.4i", "1.2j", "1.2 - 3.6", "1.2i + 1.2i"})
+    void creating_complex_number_from_string_can_throw(String str) {
+        Exception thrown = assertThrows(IllegalArgumentException.class, () -> fromString(str));
         assertTrue(thrown.getMessage().contains("Not a valid complex number"));
-        assertThrows(IllegalArgumentException.class, () -> fromString("NaNi"));
-        assertThrows(IllegalArgumentException.class, () -> fromString("1.2 3.4i"));
 
-    }*/
+    }
 }
