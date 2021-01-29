@@ -40,12 +40,19 @@ public class ComplexNumberTest {
         assertEquals(new ComplexNumber(0.0, 0.0), fromString(""));
 
         // real only / imaginary only
+        assertEquals(new ComplexNumber(0.0, 0.0), fromString("0"));
+        assertEquals(new ComplexNumber(1, 0.0), fromString("1"));
+        assertEquals(new ComplexNumber(0, 1), fromString("i"));
+        assertEquals(new ComplexNumber(-1, 0.0), fromString("-1"));
+        assertEquals(new ComplexNumber(0, -1), fromString("-i"));
         assertEquals(new ComplexNumber(12.3, 0.0), fromString("12.3"));
         assertEquals(new ComplexNumber(-12.3, 0.0), fromString("-12.3"));
         assertEquals(new ComplexNumber(0.0, 1.6), fromString("1.6i"));
         assertEquals(new ComplexNumber(0.0, -7), fromString("-7i"));
 
         // both real and imaginary
+        assertEquals(new ComplexNumber(1, 1.0), fromString("1 + i"));
+        assertEquals(new ComplexNumber(1.0, -1.0), fromString("1 - i"));
         assertEquals(new ComplexNumber(2.5, 1.6), fromString("2.5 + 1.6i"));
         assertEquals(new ComplexNumber(-2.5, 1.6), fromString("-2.5 + 1.6i"));
         assertEquals(new ComplexNumber(2.5, -1.6), fromString("2.5 - 1.6i"));
@@ -55,6 +62,10 @@ public class ComplexNumberTest {
         assertEquals(new ComplexNumber(2.5e+34, 0.6e-10), fromString("2.5e+34 + .6e-10i"));
 
         // no spaces
+        assertEquals(new ComplexNumber(1, 1.0), fromString("1+i"));
+        assertEquals(new ComplexNumber(1.0, -1.0), fromString("1-i"));
+        assertEquals(new ComplexNumber(0.0, 1.0), fromString("0.0+i"));
+        assertEquals(new ComplexNumber(2.5, -1.0), fromString("2.5+-i"));
         assertEquals(new ComplexNumber(2.5, 1.6), fromString("2.5+1.6i"));
         assertEquals(new ComplexNumber(-2.5, 1.6), fromString("-2.5+1.6i"));
         assertEquals(new ComplexNumber(-2.5, -1.6), fromString("-2.5-1.6i"));

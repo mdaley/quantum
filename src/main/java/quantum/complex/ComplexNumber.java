@@ -11,6 +11,20 @@ public final class ComplexNumber {
         this.i = i;
     }
 
+    private static double doubleFromImaginary(String img) {
+        double value;
+
+        if (img.equals("i")) {
+            value = 1.0;
+        } else if (img.equals("-i")) {
+            value = -1.0;
+        } else {
+            value = Double.parseDouble(img.replace("i", ""));
+        }
+
+        return value;
+    }
+
     public static ComplexNumber fromString(String input) {
         double real = 0.0, imaginary = 0.0;
         boolean ok = true;
@@ -23,13 +37,13 @@ public final class ComplexNumber {
 
                 if (parts.length == 1) {
                     if (parts[0].contains("i")) {
-                        imaginary = Double.parseDouble(parts[0].replace("i", ""));
+                        imaginary = doubleFromImaginary(parts[0]);
                     } else {
                         real = Double.parseDouble(parts[0]);
                     }
                 } else if (parts.length == 3 && parts[2].endsWith("i")) {
                     real = Double.parseDouble(parts[0]);
-                    imaginary = Double.parseDouble(parts[2].replace("i", ""));
+                    imaginary = doubleFromImaginary(parts[2]);
                     boolean negative = "-".equals(parts[1]);
                     imaginary = negative ? -imaginary : imaginary;
                 } else {
@@ -47,11 +61,11 @@ public final class ComplexNumber {
         return new ComplexNumber(real, imaginary);
     }
 
-    public ComplexNumber add(ComplexNumber a, ComplexNumber b) {
+    public static ComplexNumber add(ComplexNumber a, ComplexNumber b) {
         return new ComplexNumber(a.r + b.r, a.i + b.i);
     }
 
-    public ComplexNumber mul(ComplexNumber a, ComplexNumber b) {
+    public static ComplexNumber mul(ComplexNumber a, ComplexNumber b) {
         return new ComplexNumber(a.r * b.r - a.i * b.i, a.r * b.i + a.i * b.r);
     }
 

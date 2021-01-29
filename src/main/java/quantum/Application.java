@@ -1,13 +1,12 @@
 package quantum;
 
-import java.io.BufferedReader;
+import static utils.Utils.input;
+
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -29,8 +28,7 @@ public class Application {
 
         String lastChoice = "";
         while (true) {
-            System.out.print("Example to run [" + lastChoice + "] (q quit, l list): ");
-            String input = getInput();
+            String input = input("Example to run [" + lastChoice + "] (q quit, l list): ");
 
             if ("l".equalsIgnoreCase(input)) {
                 printExercises();
@@ -53,22 +51,6 @@ public class Application {
                 }
             }
         }
-    }
-
-    private static String getInput() {
-        String input;
-
-        if (System.console() != null) {
-            input = System.console().readLine();
-        } else {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-                input = reader.readLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        return input;
     }
 
     private static void printExercises() {
