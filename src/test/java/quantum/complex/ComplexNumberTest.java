@@ -33,48 +33,52 @@ public class ComplexNumberTest {
         assertEquals(expected, new ComplexNumber(real, img).toString());
     }
 
-    @Test
-    void can_create_complex_number_from_string() {
-        // nothing
-        assertEquals(new ComplexNumber(0.0, 0.0), fromString(null));
-        assertEquals(new ComplexNumber(0.0, 0.0), fromString(""));
+    private static Stream<Arguments> complex_from_string() {
+        return Stream.of(
+                // nothing
+                arguments(0.0, 0.0, null),
+                arguments(0.0, 0.0, ""),
+                // real only / imaginary only
+                arguments(0.0, 0.0, "0"),
+                arguments(1, 0.0, "1"),
+                arguments(0, 1, "i"),
+                arguments(-1, 0.0, "-1"),
+                arguments(0, -1, "-i"),
+                arguments(12.3, 0.0, "12.3"),
+                arguments(-12.3, 0.0, "-12.3"),
+                arguments(0.0, 1.6, "1.6i"),
+                arguments(0.0, -7, "-7i"),
+                // both real and imaginary
+                arguments(1, 1.0, "1 + i"),
+                arguments(1.0, -1.0, "1 - i"),
+                arguments(2.5, 1.6, "2.5 + 1.6i"),
+                arguments(-2.5, 1.6, "-2.5 + 1.6i"),
+                arguments(2.5, -1.6, "2.5 - 1.6i"),
+                arguments(-2.5, -1.6, "-2.5 - 1.6i"),
+                // exp form
+                arguments(2.5e+34, 0.6e-10, "2.5e+34 + .6e-10i"),
+                // no spaces
+                arguments(1, 1.0, "1+i"),
+                arguments(1.0, -1.0, "1-i"),
+                arguments(0.0, 1.0, "0.0+i"),
+                arguments(2.5, 1.6, "2.5+1.6i"),
+                arguments(-2.5, 1.6, "-2.5+1.6i"),
+                arguments(-2.5, -1.6, "-2.5-1.6i"),
+                arguments(2.5e+34, 0.6e-10, "2.5e+34+.6e-10i"),
+                // +- for imaginary part
+                arguments(2.5, -1.0, "2.5+-i"),
+                arguments(2.5, -1.0, "2.5 + -i"),
+                // odd spaces and other stuff
+                arguments(2.5, 1.6, "   2.5   +    1.6   i"),
+                arguments(-2.5e+34, 0.6e-10, "- 2.5 e +  34 + .  6 e  -10 i"),
+                arguments(-2.5e-2, -1.6e+2, "-2.5e-2 + -1.6e+2i"));
+    }
 
-        // real only / imaginary only
-        assertEquals(new ComplexNumber(0.0, 0.0), fromString("0"));
-        assertEquals(new ComplexNumber(1, 0.0), fromString("1"));
-        assertEquals(new ComplexNumber(0, 1), fromString("i"));
-        assertEquals(new ComplexNumber(-1, 0.0), fromString("-1"));
-        assertEquals(new ComplexNumber(0, -1), fromString("-i"));
-        assertEquals(new ComplexNumber(12.3, 0.0), fromString("12.3"));
-        assertEquals(new ComplexNumber(-12.3, 0.0), fromString("-12.3"));
-        assertEquals(new ComplexNumber(0.0, 1.6), fromString("1.6i"));
-        assertEquals(new ComplexNumber(0.0, -7), fromString("-7i"));
+    @ParameterizedTest
+    @MethodSource("complex_from_string")
+    void can_create_complex_number_from_string(double real, double img, String value) {
+        assertEquals(new ComplexNumber(real, img), fromString(value));
 
-        // both real and imaginary
-        assertEquals(new ComplexNumber(1, 1.0), fromString("1 + i"));
-        assertEquals(new ComplexNumber(1.0, -1.0), fromString("1 - i"));
-        assertEquals(new ComplexNumber(2.5, 1.6), fromString("2.5 + 1.6i"));
-        assertEquals(new ComplexNumber(-2.5, 1.6), fromString("-2.5 + 1.6i"));
-        assertEquals(new ComplexNumber(2.5, -1.6), fromString("2.5 - 1.6i"));
-        assertEquals(new ComplexNumber(-2.5, -1.6), fromString("-2.5 - 1.6i"));
-
-        // exp form
-        assertEquals(new ComplexNumber(2.5e+34, 0.6e-10), fromString("2.5e+34 + .6e-10i"));
-
-        // no spaces
-        assertEquals(new ComplexNumber(1, 1.0), fromString("1+i"));
-        assertEquals(new ComplexNumber(1.0, -1.0), fromString("1-i"));
-        assertEquals(new ComplexNumber(0.0, 1.0), fromString("0.0+i"));
-        assertEquals(new ComplexNumber(2.5, -1.0), fromString("2.5+-i"));
-        assertEquals(new ComplexNumber(2.5, 1.6), fromString("2.5+1.6i"));
-        assertEquals(new ComplexNumber(-2.5, 1.6), fromString("-2.5+1.6i"));
-        assertEquals(new ComplexNumber(-2.5, -1.6), fromString("-2.5-1.6i"));
-        assertEquals(new ComplexNumber(2.5e+34, 0.6e-10), fromString("2.5e+34+.6e-10i"));
-
-        // odd spaces and other stuff
-        assertEquals(new ComplexNumber(2.5, 1.6), fromString("   2.5   +    1.6   i"));
-        assertEquals(new ComplexNumber(-2.5e+34, 0.6e-10), fromString("- 2.5 e +  34 + .  6 e  -10 i"));
-        assertEquals(new ComplexNumber(-2.5e-2, -1.6e+2), fromString("-2.5e-2 + -1.6e+2i"));
     }
 
     @ParameterizedTest
