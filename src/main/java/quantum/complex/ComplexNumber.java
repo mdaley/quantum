@@ -103,7 +103,11 @@ public final class ComplexNumber {
             for (int i = 0; i < input.length(); i++) {
                 char c = input.charAt(i);
                 if (c != ' ') {
-                    if (c == '+' || c == '-') {
+                    if (c == '-' && previous == '+') {
+                        // for when form is n + -mi instead of just n - mi
+                        // the imaginary part is then a negative number that can be parsed
+                        strb.append(c);
+                    } else if (c == '+' || c == '-') {
                         if (previous == 'e' || i == 0) {
                             strb.append(c);
                         } else {

@@ -60,9 +60,10 @@ public class ComplexNumberTest {
         assertEquals(new ComplexNumber(-2.5, -1.6), fromString("-2.5-1.6i"));
         assertEquals(new ComplexNumber(2.5e+34, 0.6e-10), fromString("2.5e+34+.6e-10i"));
 
-        // odd spaces
+        // odd spaces and other stuff
         assertEquals(new ComplexNumber(2.5, 1.6), fromString("   2.5   +    1.6   i"));
         assertEquals(new ComplexNumber(-2.5e+34, 0.6e-10), fromString("- 2.5 e +  34 + .  6 e  -10 i"));
+        assertEquals(new ComplexNumber(-2.5e-2, -1.6e+2), fromString("-2.5e-2 + -1.6e+2i"));
     }
 
     @ParameterizedTest
