@@ -4,11 +4,19 @@ import static quantum.complex.ComplexNumber.fromString;
 
 import quantum.complex.ComplexNumber;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class Utils {
+    private static Scanner scanner = null;
+
+    private static Scanner getScanner() {
+        if (scanner == null) {
+            scanner = new Scanner(System.in);
+        }
+
+        return scanner;
+    }
+
     public static String input(String msg) {
         String input;
 
@@ -16,11 +24,7 @@ public class Utils {
         if (System.console() != null) {
             input = System.console().readLine();
         } else {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-                input = reader.readLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            input = getScanner().nextLine();
         }
 
         return input;
@@ -30,11 +34,11 @@ public class Utils {
         boolean ok = false;
         ComplexNumber number = null;
 
-        while(!ok) {
+        while (!ok) {
             try {
                 number = fromString(input(msg));
                 ok = true;
-            } catch(IllegalArgumentException __) {
+            } catch (IllegalArgumentException ignored) {
             }
         }
 
