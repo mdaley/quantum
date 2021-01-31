@@ -69,6 +69,23 @@ public final class ComplexNumber {
         return new ComplexNumber(a.r * b.r - a.i * b.i, a.r * b.i + a.i * b.r);
     }
 
+    public static ComplexNumber div(ComplexNumber a, ComplexNumber b) {
+        double divisor = (b.r * b.r) + (b.i * b.i);
+        return new ComplexNumber(((a.r * b.r) + (a.i * b.i)) / divisor, ((b.r * a.i) - (a.r * b.i)) / divisor);
+    }
+
+    public static ComplexNumber sub(ComplexNumber a, ComplexNumber b) {
+        return new ComplexNumber(a.r - b.r, a.i - b.i);
+    }
+
+    public Double modulus() {
+        return Math.sqrt(r * r + i * i);
+    }
+
+    public ComplexNumber conjugate() {
+        return new ComplexNumber(r, -i);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
