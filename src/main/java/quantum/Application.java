@@ -11,13 +11,15 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class Application {
 
-    private static final Map<Reference, Exercise> exercises = new HashMap<>();
+    private static final SortedMap<Reference, Exercise> exercises = new TreeMap<>();
 
     public static void main(String[] args) {
         buildExercisesMap();
