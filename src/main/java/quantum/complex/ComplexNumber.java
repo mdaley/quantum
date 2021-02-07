@@ -1,28 +1,20 @@
 package quantum.complex;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.atan;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Objects;
 
 public final class ComplexNumber {
+    public static final NumberFormat NUMBER_FORMAT = DecimalFormat.getInstance();
     public final double r;
     public final double i;
 
     public ComplexNumber(double r, double i) {
         this.r = r;
         this.i = i;
-    }
-
-    private static double doubleFromImaginary(String img) {
-        double value;
-
-        if (img.equals("i")) {
-            value = 1.0;
-        } else if (img.equals("-i")) {
-            value = -1.0;
-        } else {
-            value = Double.parseDouble(img.replace("i", ""));
-        }
-
-        return value;
     }
 
     public static ComplexNumber fromString(String input) {
@@ -82,8 +74,39 @@ public final class ComplexNumber {
         return Math.sqrt(r * r + i * i);
     }
 
+    public Double angle() {
+        if (r == 0 && i == 0) {
+            return Double.NaN;
+        } else if (r == 0) {
+            return i > 0 ? PI / 2 : 3 * PI / 2;
+        } else if (i == 0) {
+            return r > 0 ? 0.0 : PI;
+        } else if (r > 0) {
+            if (i > 0) {
+                // quadrant 1
+                return atan(i / r);
+            } else {
+                // quadrant 4
+                return 2.0 * PI - atan( -1.0 * i / r);
+            }
+        } else { // r < 0
+            if (i > 0) {
+                // quadrant 2
+                return PI - atan(-1.0 * i / r);
+            } else {
+                // quadrant 3
+                return PI + atan(i / r);
+            }
+        }
+    }
+
     public ComplexNumber conjugate() {
         return new ComplexNumber(r, -i);
+    }
+
+    public String toPolarString(PolarMode mode) {
+        double angle = angle();
+        return String.format("(%s, %s)", NUMBER_FORMAT.format(modulus()), mode.converterFn.apply(angle));
     }
 
     @Override
@@ -119,6 +142,20 @@ public final class ComplexNumber {
         } else {
             return r + " - " + i * -1.0 + "i";
         }
+    }
+
+    private static double doubleFromImaginary(String img) {
+        double value;
+
+        if (img.equals("i")) {
+            value = 1.0;
+        } else if (img.equals("-i")) {
+            value = -1.0;
+        } else {
+            value = Double.parseDouble(img.replace("i", ""));
+        }
+
+        return value;
     }
 
     /**

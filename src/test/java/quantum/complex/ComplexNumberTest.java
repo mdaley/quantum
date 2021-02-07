@@ -78,7 +78,6 @@ public class ComplexNumberTest {
     @MethodSource("complex_from_string")
     void can_create_complex_number_from_string(double real, double img, String value) {
         assertEquals(new ComplexNumber(real, img), fromString(value));
-
     }
 
     @ParameterizedTest
@@ -86,6 +85,31 @@ public class ComplexNumberTest {
     void creating_complex_number_from_string_can_throw(String str) {
         Exception thrown = assertThrows(IllegalArgumentException.class, () -> fromString(str));
         assertTrue(thrown.getMessage().contains("Not a valid complex number"));
+    }
 
+    private static Stream<Arguments> polar_from_complex() {
+        return Stream.of(
+                // raw
+                arguments("(1, 0)", 1.0, 0.0, PolarMode.RAW),
+                arguments("(1.414, 0.785)", 1.0, 1.0, PolarMode.RAW),
+                arguments("(1, 1.571)", 0.0, 1.0, PolarMode.RAW),
+                arguments("(1.414, 2.356)", -1.0, 1.0, PolarMode.RAW),
+                arguments("(1, 3.142)", -1.0, 0.0, PolarMode.RAW),
+                arguments("(1.414, 3.927)", -1.0, -1.0, PolarMode.RAW),
+                arguments("(1, 4.712)", 0.0, -1.0, PolarMode.RAW),
+                arguments("(1.414, 5.498)", 1.0, -1.0, PolarMode.RAW),
+                // really raw
+                arguments("(1.414, 5.497787143782138)", 1.0, -1.0, PolarMode.REALLY_RAW),
+                // PI text
+                arguments("(1, 0)", 1.0, 0.0, PolarMode.PI_TEXT),
+                arguments("(1.414, 0.25PI)", 1.0, 1.0, PolarMode.PI_TEXT)//,
+                //arguments("(1, 1}", Math.sqrt(Double.MAX_VALUE) / 2, Math.sqrt(Double.MAX_VALUE) / 2, PolarMode.PI_TEXT)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("polar_from_complex")
+    void polar_form_string_from_cartesian(String polar, double real, double img, PolarMode mode) {
+        assertEquals(polar, new ComplexNumber(real, img).toPolarString(mode));
     }
 }
