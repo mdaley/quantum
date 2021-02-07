@@ -14,7 +14,7 @@ public class ExtendedNumberFormat extends DecimalFormat {
     private static final double EXP_HIGH_BOUNDARY = 1e+10;
     private static final double EXP_LOW_BOUNDARY = 1e-5;
 
-    private DecimalFormat expFormat;
+    private final DecimalFormat expFormat;
 
     private double highDoubleBoundary = EXP_HIGH_BOUNDARY;
     private double lowDoubleBoundary = EXP_LOW_BOUNDARY;
@@ -46,7 +46,7 @@ public class ExtendedNumberFormat extends DecimalFormat {
 
     @Override
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
-        if (Math.abs(number) < highDoubleBoundary && Math.abs(number) > lowDoubleBoundary) {
+        if (number == 0.0 || (Math.abs(number) < highDoubleBoundary && Math.abs(number) > lowDoubleBoundary)) {
             return super.format(number, toAppendTo, pos);
         } else {
             return expFormat.format(number, toAppendTo, pos);

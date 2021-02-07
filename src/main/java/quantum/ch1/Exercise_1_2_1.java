@@ -3,6 +3,7 @@ package quantum.ch1;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.complex.ComplexFormat;
 import quantum.Exercise;
+import utils.ExtendedNumberFormat;
 import utils.Utils;
 
 import java.math.BigDecimal;
@@ -10,7 +11,7 @@ import java.math.MathContext;
 
 public class Exercise_1_2_1 extends Exercise {
 
-    public static final ComplexFormat COMPLEX_FORMAT = ComplexFormat.getInstance();
+    public static final ComplexFormat COMPLEX_FORMAT = new ComplexFormat(ExtendedNumberFormat.getExtendedInstance());
 
     @Override
     public String title() {
@@ -29,7 +30,7 @@ public class Exercise_1_2_1 extends Exercise {
 
     @Override
     public void execute() {
-        Complex n = Utils.inputComplexNumber("Number: ");
+        Complex n = Utils.inputComplexNumber(COMPLEX_FORMAT, "Number: ");
 
         System.out.printf("Modulus = %s\n", modulus(n));
         System.out.printf("Conjugate = %s\n", COMPLEX_FORMAT.format(n.conjugate()));

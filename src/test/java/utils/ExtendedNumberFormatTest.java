@@ -19,6 +19,7 @@ public class ExtendedNumberFormatTest {
         newFormatter.setGroupingUsed(false);
 
         // The standard formatter, showing not so nice results
+        assertEquals("0", stdFormatter.format(0.0));
         assertEquals("1.23", stdFormatter.format(1.23));
         assertEquals("12345678.123", stdFormatter.format(12345678.123));
         // this is what we don't want!
@@ -27,6 +28,7 @@ public class ExtendedNumberFormatTest {
         assertEquals("0.000000000123", stdFormatter.format(1.23E-10));
 
         // the new formatter, showing improvements by moving to scientific form for very large or small numbers
+        assertEquals("0", newFormatter.format(0.0));
         assertEquals("1.23", newFormatter.format(1.23));
         assertEquals("1234567891.234", newFormatter.format(1234567891.234));
         assertEquals("1.235E10", newFormatter.format(12345678912.345)); // half-up truncation
@@ -48,6 +50,7 @@ public class ExtendedNumberFormatTest {
         newFormatter.setGroupingUsed(false);
 
         // The standard formatter, showing not so nice results
+        assertEquals("0", stdFormatter.format(0L));
         assertEquals("1", stdFormatter.format(1L));
         assertEquals("123456789", stdFormatter.format(123456789L));
         assertEquals("12345678912", stdFormatter.format(12345678912L));
@@ -55,6 +58,7 @@ public class ExtendedNumberFormatTest {
         assertEquals("-9223372036854775808", stdFormatter.format(Long.MIN_VALUE));
 
         // the new formatter, showing improvements by moving to scientific form for very large or small numbers
+        assertEquals("0", stdFormatter.format(0L));
         assertEquals("1", newFormatter.format(1L));
         assertEquals("1234567891", newFormatter.format(1234567891L));
         assertEquals("1.235E10", newFormatter.format(12345678912L)); // half-up truncation

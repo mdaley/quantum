@@ -1,12 +1,14 @@
 package quantum.ch1;
 
 import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.complex.ComplexFormat;
 import quantum.Exercise;
-import quantum.complex.ComplexNumber;
-import quantum.complex.PolarMode;
+import utils.ExtendedNumberFormat;
 import utils.Utils;
 
 public class Exercise_1_3_1 extends Exercise {
+    private static final ComplexFormat COMPLEX_FORMAT = new ComplexFormat(ExtendedNumberFormat.getExtendedInstance());
+
     @Override
     public String title() {
         return "Cartesian to Polar";
@@ -24,7 +26,7 @@ public class Exercise_1_3_1 extends Exercise {
 
     @Override
     public void execute() {
-        Complex n = Utils.inputComplexNumber("First number: ");
+        Complex n = Utils.inputComplexNumber(COMPLEX_FORMAT, "First number: ");
 
         //System.out.println("Polar = " + n.toPolarString(PolarMode.PI_TEXT));
 

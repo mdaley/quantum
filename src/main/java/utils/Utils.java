@@ -30,13 +30,13 @@ public class Utils {
         return input;
     }
 
-    public static Complex inputComplexNumber(String msg) {
+    public static Complex inputComplexNumber(ComplexFormat formatter, String msg) {
         boolean ok = false;
         Complex number = null;
 
         while (!ok) {
             try {
-                number = ComplexFormat.getInstance().parse(input(msg));
+                number = formatter.parse(input(msg));
                 ok = true;
             } catch (MathParseException ignored) {
             }

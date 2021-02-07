@@ -3,11 +3,12 @@ package quantum.ch1;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.complex.ComplexFormat;
 import quantum.Exercise;
+import utils.ExtendedNumberFormat;
 import utils.Utils;
 
 public class Exercise_1_1_1 extends Exercise {
 
-    public static final ComplexFormat COMPLEX_FORMAT = ComplexFormat.getInstance();
+    public static final ComplexFormat COMPLEX_FORMAT = new ComplexFormat(ExtendedNumberFormat.getExtendedInstance());
 
     @Override
     public String title() {
@@ -26,15 +27,15 @@ public class Exercise_1_1_1 extends Exercise {
 
     @Override
     public void execute() {
-        Complex n1 = Utils.inputComplexNumber("First number: ");
-        Complex n2 = Utils.inputComplexNumber("Second number: ");
+        Complex n1 = Utils.inputComplexNumber(COMPLEX_FORMAT, "First number: ");
+        Complex n2 = Utils.inputComplexNumber(COMPLEX_FORMAT, "Second number: ");
 
         String n1f = COMPLEX_FORMAT.format(n1);
         String n2f = COMPLEX_FORMAT.format(n2);
-        System.out.printf("%s + %s = %s\n", n1f, n2f, COMPLEX_FORMAT.format(n1.add(n2)));
-        System.out.printf("%s - %s = %s\n", n1f, n2f, COMPLEX_FORMAT.format(n1.subtract(n2)));
-        System.out.printf("%s * %s = %s\n", n1f, n2f, COMPLEX_FORMAT.format(n1.multiply(n2)));
-        System.out.printf("%s / %s = %s\n", n1f, n2f, COMPLEX_FORMAT.format(n1.divide(n2)));
+        System.out.printf("(%s) + (%s) = %s\n", n1f, n2f, COMPLEX_FORMAT.format(n1.add(n2)));
+        System.out.printf("(%s) - (%s) = %s\n", n1f, n2f, COMPLEX_FORMAT.format(n1.subtract(n2)));
+        System.out.printf("(%s) * (%s) = %s\n", n1f, n2f, COMPLEX_FORMAT.format(n1.multiply(n2)));
+        System.out.printf("(%s) / (%s) = %s\n", n1f, n2f, COMPLEX_FORMAT.format(n1.divide(n2)));
     }
 
 }
