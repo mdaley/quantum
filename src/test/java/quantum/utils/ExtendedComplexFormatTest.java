@@ -1,4 +1,4 @@
-package quantum.complex;
+package quantum.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -13,12 +13,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import quantum.complex.PolarMode;
 import utils.ExtendedComplexFormat;
-import utils.ExtendedNumberFormat;
 
 import java.util.stream.Stream;
 
-public class ComplexNumberTest {
+public class ExtendedComplexFormatTest {
+    private static final ExtendedComplexFormat EXTENDED_COMPLEX_FORMAT = ExtendedComplexFormat.getExtendedInstance();
+    public static final ComplexFormat COMPLEX_FORMAT = ComplexFormat.getInstance();
 
     private static Stream<Arguments> string_from_complex() {
         return Stream.of(arguments("0", 0.0, 0.0),
@@ -38,8 +40,7 @@ public class ComplexNumberTest {
     @ParameterizedTest
     @MethodSource("string_from_complex")
     void can_turn_complex_number_into_string(String expected, double real, double img) {
-        ExtendedComplexFormat complexFormat = new ExtendedComplexFormat(ExtendedNumberFormat.getExtendedInstance());
-        assertEquals(expected, complexFormat.format(Complex.valueOf(real, img)));
+        assertEquals(expected, EXTENDED_COMPLEX_FORMAT.format(Complex.valueOf(real, img)));
     }
 
     private static Stream<Arguments> complex_from_string() {
@@ -85,18 +86,18 @@ public class ComplexNumberTest {
     void can_create_complex_number_from_string(boolean legacyThrows, boolean legacyWrong, double real, double img, String value) {
 
         // the new way always works!
-        assertEquals(Complex.valueOf(real, img), ExtendedComplexFormat.getExtendedInstance().parse(value));
+        assertEquals(Complex.valueOf(real, img), EXTENDED_COMPLEX_FORMAT.parse(value));
 
         // old way fails a lot of the time :-(
         if (legacyThrows) {
-            assertThrows(MathParseException.class, () -> ComplexFormat.getInstance().parse(value));
+            assertThrows(MathParseException.class, () -> COMPLEX_FORMAT.parse(value));
         } else {
             // and sometimes is just plain wrong!
             if (legacyWrong) {
                 // e.g. legacy turns "1.6i" into 1.6 + 0i, not 0 + 1.6i !!
-                assertNotEquals(Complex.valueOf(real, img), ComplexFormat.getInstance().parse(value));
+                assertNotEquals(Complex.valueOf(real, img), COMPLEX_FORMAT.parse(value));
             } else {
-                assertEquals(Complex.valueOf(real, img), ComplexFormat.getInstance().parse(value));
+                assertEquals(Complex.valueOf(real, img), COMPLEX_FORMAT.parse(value));
             }
         }
     }
@@ -105,14 +106,14 @@ public class ComplexNumberTest {
     @ValueSource(strings = {"NULL", "", "huh", "1.2 3.4i", "1.2j", "1.2 - 3.6", "1.2i + 1.2i"})
     void creating_complex_number_from_string_throws_when_string_is_invalid(String str) {
         Exception thrown = assertThrows(MathParseException.class, () ->
-                ExtendedComplexFormat.getExtendedInstance().parse("NULL".equals(str) ? null : str));
+                EXTENDED_COMPLEX_FORMAT.parse("NULL".equals(str) ? null : str));
         assertTrue(thrown.getMessage().contains("unparseable"));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"1.2j", "1.2 - 3.6"})
     void legacy_complex_format_does_not_throw_errors_when_it_should(String str) {
-        ComplexFormat.getInstance().parse(str);
+        COMPLEX_FORMAT.parse(str);
     }
 
     private static Stream<Arguments> polar_from_complex() {
@@ -130,14 +131,6 @@ public class ComplexNumberTest {
                 arguments("(1.414, 5.497787143782138)", 1.0, -1.0, PolarMode.REALLY_RAW),
                 // PI text
                 arguments("(1, 0)", 1.0, 0.0, PolarMode.PI_TEXT),
-                arguments("(1.414, 0.25PI)", 1.0, 1.0, PolarMode.PI_TEXT)//,
-                //arguments("(1, 1}", Math.sqrt(Double.MAX_VALUE) / 2, Math.sqrt(Double.MAX_VALUE) / 2, PolarMode.PI_TEXT)
-        );
+                arguments("(1.414, 0.25PI)", 1.0, 1.0, PolarMode.PI_TEXT));
     }
-
-    /*@ParameterizedTest
-    @MethodSource("polar_from_complex")
-    void polar_form_string_from_cartesian(String polar, double real, double img, PolarMode mode) {
-        assertEquals(polar, new Complex(real, img).toPolarString());
-    }*/
 }

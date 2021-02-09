@@ -1,8 +1,9 @@
-package utils;
+package quantum.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import utils.ExtendedNumberFormat;
 
 import java.text.DecimalFormat;
 
