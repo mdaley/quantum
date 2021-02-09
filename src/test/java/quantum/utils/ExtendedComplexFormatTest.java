@@ -48,6 +48,8 @@ public class ExtendedComplexFormatTest {
                 arguments(false, false, 0.0, 0.0, "0"),
                 arguments(false, false, 1, 0.0, "1"),
                 arguments(true, false, 0, 1, "i"),
+                arguments(false, true, 0, 2, "2i"),
+                arguments(false, true, 0, -2, "-2i"),
                 arguments(false, false, -1, 0.0, "-1"),
                 arguments(true, false, 0, -1, "-i"),
                 arguments(false, false, 12.3, 0.0, "12.3"),
@@ -77,7 +79,13 @@ public class ExtendedComplexFormatTest {
                 // odd spaces and other stuff
                 arguments(false, true, 2.5, 1.6, "   2.5   +    1.6   i"),
                 arguments(true, false, -2.5e+34, 0.6e-10, "- 2.5 e +  34 + .  6 e  -10 i"),
-                arguments(true, false, -2.5e-2, -1.6e+2, "-2.5e-2 + -1.6e+2i"));
+                arguments(true, false, -2.5e-2, -1.6e+2, "-2.5e-2 + -1.6e+2i"),
+                // scientific form special cases
+                arguments(true, false, 2.3e-10, 0.0, "2.3e-10"),
+                arguments(true, false, 0.0, -2.3e-10, "-2.3e-10i"),
+                arguments(false, true, 0.0, -2.3e-10, "-2.3E-10i"),
+                arguments(false, true, 0.0, 2.3e100, "2.3E100i"),
+                arguments(true, false, 0.0, 2.3e100, "2.3E+100i"));
     }
 
     @ParameterizedTest

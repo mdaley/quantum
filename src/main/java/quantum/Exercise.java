@@ -15,8 +15,6 @@ public abstract class Exercise {
 
     public abstract String description();
 
-    public abstract boolean repeats();
-
     public abstract void execute();
 
     private void getReferenceFromClassName() {

@@ -20,31 +20,28 @@ public class ExtendedComplexFormat extends ComplexFormat {
 
     @Override
     public StringBuffer format(Complex complex, StringBuffer toAppendTo, FieldPosition pos) {
-        if (complex.getImaginary() == 0.0) {
-            return super.getRealFormat().format(complex.getReal(), toAppendTo, pos);
-        } else if (complex.getReal() == 0.0) {
-            StringBuffer format = super.getImaginaryFormat().format(complex.getImaginary(), toAppendTo, pos);
-            format.append(this.getImaginaryCharacter());
-            return format;
-        } else {
-            StringBuffer buf = super.format(complex, toAppendTo, pos);
-            String[] parts = buf.toString().split(" ");
-            // special cases
-            if (parts.length == 3) {
-                if (parts[2].equals("0i")) {
-                    buf.delete(buf.length() - 5, buf.length()); // remove img part and sign
-                } else if (parts[2].equals("1i")) {
-                    buf.delete(buf.length() - 2, buf.length() - 1); // remove number before img part
-                } else if (parts[0].equals("0")) {
-                    buf.delete(0, 2); // remove real part
-                    closeUpOrRemoveSign(buf, parts);
-                } else if (parts[0].equals("-0")) {
-                    buf.delete(0, 3); // remove real part
-                    closeUpOrRemoveSign(buf, parts);
-                }
-            }
+        StringBuffer buf = super.format(complex, toAppendTo, pos);
 
-            return buf;
+        tidySpecialCases(buf);
+
+        return buf;
+    }
+
+    private void tidySpecialCases(StringBuffer buf) {
+        String[] parts = buf.toString().split(" ");
+
+        if (parts.length == 3) {
+            if (parts[2].equals("0i")) {
+                buf.delete(buf.length() - 5, buf.length()); // remove img part and sign
+            } else if (parts[2].equals("1i")) {
+                buf.delete(buf.length() - 2, buf.length() - 1); // remove number before img part
+            } else if (parts[0].equals("0")) {
+                buf.delete(0, 2); // remove real part
+                closeUpOrRemoveSign(buf, parts);
+            } else if (parts[0].equals("-0")) {
+                buf.delete(0, 3); // remove real part with minus sign
+                closeUpOrRemoveSign(buf, parts);
+            }
         }
     }
 
@@ -120,7 +117,7 @@ public class ExtendedComplexFormat extends ComplexFormat {
                         // the imaginary part is then a negative number that can be parsed
                         strb.append(c);
                     } else if (c == '+' || c == '-') {
-                        if (previous == 'e' || i == 0) {
+                        if (previous == 'e' || previous == 'E' || i == 0) {
                             strb.append(c);
                         } else {
                             strb.append(' ');

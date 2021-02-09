@@ -21,11 +21,6 @@ public class Exercise_1_1_1 extends Exercise {
     }
 
     @Override
-    public boolean repeats() {
-        return true;
-    }
-
-    @Override
     public void execute() {
         Complex n1 = Utils.inputComplexNumber(COMPLEX_FORMAT, "First number: ");
         Complex n2 = Utils.inputComplexNumber(COMPLEX_FORMAT, "Second number: ");

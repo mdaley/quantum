@@ -22,13 +22,8 @@ public class Exercise_1_3_1 extends Exercise {
     }
 
     @Override
-    public boolean repeats() {
-        return false;
-    }
-
-    @Override
     public void execute() {
-        ExtendedComplex n = ExtendedComplex.extendedValueOf(Utils.inputComplexNumber(COMPLEX_FORMAT, "Number: "));
+        ExtendedComplex n = ExtendedComplex.extendedValueOf(Utils.inputComplexNumber(COMPLEX_FORMAT, "Complex Number: "));
 
         System.out.println("Polar = " + POLAR_FORMAT.format(n));
 

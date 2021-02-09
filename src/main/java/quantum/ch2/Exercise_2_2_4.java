@@ -14,11 +14,6 @@ public class Exercise_2_2_4 extends Exercise {
     }
 
     @Override
-    public boolean repeats() {
-        return false;
-    }
-
-    @Override
     public void execute() {
         System.out.println("I do something interesting");
     }
