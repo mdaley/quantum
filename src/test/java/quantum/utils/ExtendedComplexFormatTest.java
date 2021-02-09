@@ -13,7 +13,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import quantum.complex.PolarMode;
 import utils.ExtendedComplexFormat;
 
 import java.util.stream.Stream;
@@ -114,23 +113,5 @@ public class ExtendedComplexFormatTest {
     @ValueSource(strings = {"1.2j", "1.2 - 3.6"})
     void legacy_complex_format_does_not_throw_errors_when_it_should(String str) {
         COMPLEX_FORMAT.parse(str);
-    }
-
-    private static Stream<Arguments> polar_from_complex() {
-        return Stream.of(
-                // raw
-                arguments("(1, 0)", 1.0, 0.0, PolarMode.RAW),
-                arguments("(1.414, 0.785)", 1.0, 1.0, PolarMode.RAW),
-                arguments("(1, 1.571)", 0.0, 1.0, PolarMode.RAW),
-                arguments("(1.414, 2.356)", -1.0, 1.0, PolarMode.RAW),
-                arguments("(1, 3.142)", -1.0, 0.0, PolarMode.RAW),
-                arguments("(1.414, 3.927)", -1.0, -1.0, PolarMode.RAW),
-                arguments("(1, 4.712)", 0.0, -1.0, PolarMode.RAW),
-                arguments("(1.414, 5.498)", 1.0, -1.0, PolarMode.RAW),
-                // really raw
-                arguments("(1.414, 5.497787143782138)", 1.0, -1.0, PolarMode.REALLY_RAW),
-                // PI text
-                arguments("(1, 0)", 1.0, 0.0, PolarMode.PI_TEXT),
-                arguments("(1.414, 0.25PI)", 1.0, 1.0, PolarMode.PI_TEXT));
     }
 }

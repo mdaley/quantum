@@ -8,13 +8,13 @@ import java.text.NumberFormat;
 public class PolarFormat {
 
     private static final String PI_SYMBOL = "π";
-    private NumberFormat modulusFormat;
-    private NumberFormat angleFormat;
-    private String angleSymbol;
-    private String outputPattern;
+    private final NumberFormat modulusFormat;
+    private final NumberFormat angleFormat;
+    private final String angleSymbol;
+    private final String outputPattern;
 
     public static PolarFormat getInstance() {
-        return new PolarFormat(DecimalFormat.getInstance(), DecimalFormat.getInstance(), PI_SYMBOL, "(%s, %s%s)");
+        return new PolarFormat(ExtendedNumberFormat.getInstance(), ExtendedNumberFormat.getInstance(), PI_SYMBOL, "(%s, %s%s)");
     }
 
     public PolarFormat(NumberFormat modulusFormat, NumberFormat angleFormat, String angleSymbol, String outputPattern) {

@@ -20,6 +20,9 @@ public class ExtendedComplex extends Complex {
         return new ExtendedComplex(real, imaginary);
     }
 
+    public static ExtendedComplex extendedValueOf(Complex complex) {
+        return extendedValueOf(complex.getReal(), complex.getImaginary());
+    }
 
     public double modulus() {
         double r = getReal();

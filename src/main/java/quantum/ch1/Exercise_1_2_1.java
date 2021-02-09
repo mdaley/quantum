@@ -3,7 +3,7 @@ package quantum.ch1;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.complex.ComplexFormat;
 import quantum.Exercise;
-import utils.ExtendedNumberFormat;
+import utils.ExtendedComplexFormat;
 import utils.Utils;
 
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ import java.math.MathContext;
 
 public class Exercise_1_2_1 extends Exercise {
 
-    public static final ComplexFormat COMPLEX_FORMAT = new ComplexFormat(ExtendedNumberFormat.getExtendedInstance());
+    private static final ComplexFormat COMPLEX_FORMAT = ExtendedComplexFormat.getExtendedInstance();
 
     @Override
     public String title() {
