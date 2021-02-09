@@ -1,8 +1,10 @@
 package utils;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 import quantum.complex.ExtendedComplex;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class PolarFormat {

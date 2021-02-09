@@ -1,6 +1,8 @@
 package quantum.complex;
 
 import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 import org.apache.commons.math3.complex.Complex;
 
@@ -22,6 +24,12 @@ public class ExtendedComplex extends Complex {
 
     public static ExtendedComplex extendedValueOf(Complex complex) {
         return extendedValueOf(complex.getReal(), complex.getImaginary());
+    }
+
+    public static ExtendedComplex fromPolar(double modulus, double angle) {
+        // avoid negative zero by testing modulus == 0.0
+        return ExtendedComplex.extendedValueOf(modulus == 0.0 ? 0.0 : modulus * Math.cos(angle),
+                modulus == 0.0 ? 0.0 : modulus * Math.sin(angle));
     }
 
     public double modulus() {

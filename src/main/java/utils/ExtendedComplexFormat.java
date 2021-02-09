@@ -27,7 +27,33 @@ public class ExtendedComplexFormat extends ComplexFormat {
             format.append(this.getImaginaryCharacter());
             return format;
         } else {
-            return super.format(complex, toAppendTo, pos);
+            StringBuffer buf = super.format(complex, toAppendTo, pos);
+            String[] parts = buf.toString().split(" ");
+            // special cases
+            if (parts.length == 3) {
+                if (parts[2].equals("0i")) {
+                    buf.delete(buf.length() - 5, buf.length()); // remove img part and sign
+                } else if (parts[2].equals("1i")) {
+                    buf.delete(buf.length() - 2, buf.length() - 1); // remove number before img part
+                } else if (parts[0].equals("0")) {
+                    buf.delete(0, 2); // remove real part
+                    closeUpOrRemoveSign(buf, parts);
+                } else if (parts[0].equals("-0")) {
+                    buf.delete(0, 3); // remove real part
+                    closeUpOrRemoveSign(buf, parts);
+                }
+            }
+
+            return buf;
+        }
+    }
+
+    private void closeUpOrRemoveSign(StringBuffer buf, String[] parts) {
+        // where there is no real part to show,this is so we get '- 34.5i' => '-34.5i' and '+ 12.123i' => '12.123i'
+        if (parts[1].equals("+")) {
+            buf.delete(0, 2);
+        } else {
+            buf.delete(1, 2);
         }
     }
 
