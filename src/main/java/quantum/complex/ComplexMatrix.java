@@ -7,9 +7,9 @@ import java.util.List;
 
 public class ComplexMatrix {
 
-    private int rows;
-    private int columns;
-    private Complex[][] values;
+    private final int rows;
+    private final int columns;
+    private final Complex[][] values;
 
     public static ComplexMatrix fromString(String data) {
         int rowCount;

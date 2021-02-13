@@ -1,7 +1,6 @@
 package quantum.complex;
 
 import static java.lang.Math.PI;
-import static java.lang.Math.floorDiv;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
