@@ -1,8 +1,6 @@
 package quantum.complex;
 
 import static java.lang.Math.PI;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 
 import org.apache.commons.math3.complex.Complex;
 
