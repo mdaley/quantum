@@ -2,7 +2,6 @@ package quantum.complex;
 
 import static java.lang.Math.PI;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
@@ -10,7 +9,6 @@ import static quantum.complex.Complex.complex;
 import static quantum.complex.CustomAsserts.assertClose;
 import static quantum.complex.Polar.polar;
 
-import org.apache.commons.math3.exception.MathParseException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
