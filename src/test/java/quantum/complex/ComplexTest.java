@@ -50,7 +50,7 @@ public class ComplexTest {
 
     @ParameterizedTest
     @MethodSource("cartesian_construction")
-    void construction_is_correct_in_both_modes(double modulus, double angle, double real, double imaginary) {
+    void construction_is_correct_both_cartesian_and_polar(double modulus, double angle, double real, double imaginary) {
         Complex complex = complex(real, imaginary);
         assertEquals(real, complex.real);
         assertEquals(imaginary, complex.img);

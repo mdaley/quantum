@@ -1,17 +1,15 @@
 package quantum.complex;
 
-import utils.ExtendedComplexFormat;
+import static quantum.complex.Complex.complex;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ComplexMatrix {
-    public static final ExtendedComplexFormat COMPLEX_FORMAT = ExtendedComplexFormat.getExtendedInstance();
 
     private int rows;
     private int columns;
-    private ExtendedComplex[][] values;
+    private Complex[][] values;
 
     public static ComplexMatrix fromString(String data) {
         int rowCount;
@@ -19,7 +17,7 @@ public class ComplexMatrix {
         String[] rows = data.split(";");
         rowCount = rows.length;
 
-        List<ExtendedComplex> list = new ArrayList<>();
+        List<Complex> list = new ArrayList<>();
 
         for (int i = 0; i < rows.length; i++) {
             String[] elements = rows[i].split(",");
@@ -30,11 +28,11 @@ public class ComplexMatrix {
             }
 
             for (int j = 0; j < elements.length; j++) {
-                list.add(ExtendedComplex.extendedValueOf(COMPLEX_FORMAT.parse(elements[j].trim())));
+                list.add(complex(elements[j].trim()));
             }
         }
 
-        ExtendedComplex[][] values = new ExtendedComplex[rowCount][colCount];
+        Complex[][] values = new Complex[rowCount][colCount];
 
         int i = 0;
         for (int m = 0; m < rowCount; m++) {
@@ -46,7 +44,7 @@ public class ComplexMatrix {
         return new ComplexMatrix(rowCount, colCount, values);
     }
 
-    private ComplexMatrix(int rows, int columns, ExtendedComplex[][] values) {
+    private ComplexMatrix(int rows, int columns, Complex[][] values) {
         this.rows = rows;
         this.columns = columns;
         this.values = values;
@@ -57,7 +55,7 @@ public class ComplexMatrix {
         StringBuilder strb = new StringBuilder();
         for (int m = 0; m < rows; m++) {
             for (int n = 0; n < columns; n++) {
-                strb.append(COMPLEX_FORMAT.format(values[m][n]));
+                strb.append(values[m][n].toString());
                 if (n < columns - 1) {
                     strb.append(", ");
                 }
@@ -78,7 +76,7 @@ public class ComplexMatrix {
         int i = 0;
         for (int m = 0; m < rows; m++) {
             for (int n = 0; n < columns; n++) {
-                String cell = COMPLEX_FORMAT.format(values[m][n]);
+                String cell = values[m][n].toString();
                 cells[i++] = cell;
                 len = cell.length() > len ? cell.length() : len;
             }
