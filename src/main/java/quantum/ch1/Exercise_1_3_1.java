@@ -1,15 +1,10 @@
 package quantum.ch1;
 
-import org.apache.commons.math3.complex.ComplexFormat;
 import quantum.Exercise;
-import quantum.complex.ExtendedComplex;
-import utils.ExtendedComplexFormat;
-import utils.PolarFormat;
+import quantum.complex.Complex;
 import utils.Utils;
 
 public class Exercise_1_3_1 extends Exercise {
-    private static final ComplexFormat COMPLEX_FORMAT = ExtendedComplexFormat.getExtendedInstance();
-    private static final PolarFormat POLAR_FORMAT = PolarFormat.getInstance();
 
     @Override
     public String title() {
@@ -23,9 +18,9 @@ public class Exercise_1_3_1 extends Exercise {
 
     @Override
     public void execute() {
-        ExtendedComplex n = ExtendedComplex.extendedValueOf(Utils.inputComplexNumber(COMPLEX_FORMAT, "Complex Number: "));
+        Complex n = Utils.inputComplexNumber("Complex Number: ");
 
-        System.out.println("Polar = " + POLAR_FORMAT.format(n));
+        System.out.println("Polar = " + n.polar().toString());
 
     }
 }

@@ -1,8 +1,8 @@
 package utils;
 
-import org.apache.commons.math3.complex.Complex;
-import org.apache.commons.math3.complex.ComplexFormat;
-import org.apache.commons.math3.exception.MathParseException;
+import static quantum.complex.Complex.complex;
+
+import quantum.complex.Complex;
 
 import java.util.Scanner;
 
@@ -30,15 +30,15 @@ public class Utils {
         return input;
     }
 
-    public static Complex inputComplexNumber(ComplexFormat formatter, String msg) {
+    public static Complex inputComplexNumber(String msg) {
         boolean ok = false;
         Complex number = null;
 
         while (!ok) {
             try {
-                number = formatter.parse(input(msg));
+                number = complex(input(msg));
                 ok = true;
-            } catch (MathParseException ignored) {
+            } catch (IllegalArgumentException ignored) {
             }
         }
 

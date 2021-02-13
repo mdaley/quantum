@@ -2,6 +2,8 @@ package quantum.complex;
 
 import static java.lang.Math.PI;
 
+import java.util.function.BiFunction;
+
 /**
  * Polar representation of a complex number with doubles for modulus and (radian) angle parts.
  */
@@ -69,5 +71,14 @@ public class Polar {
 
     private double real() {
         return modulus * Math.cos(angle);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%s, %s)", modulus, angle);
+    }
+
+    public String toString(BiFunction<Double, Double, String> formatter) {
+        return formatter.apply(modulus, angle);
     }
 }
