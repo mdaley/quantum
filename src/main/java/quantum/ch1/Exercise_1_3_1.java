@@ -12,7 +12,7 @@ import java.util.function.BiFunction;
 
 public class Exercise_1_3_1 extends Exercise {
 
-    public static final String PI_SYMBOL = "\uD835\uDF45";
+    public static final String PI_SYMBOL = "π";
     public static final NumberFormat DP3 = new DecimalFormat("0.####");
     public static final NumberFormat DP_3_SCI = new DecimalFormat("0.####E0");
 

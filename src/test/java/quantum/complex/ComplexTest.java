@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 public class ComplexTest {
 
-    public static Stream<Arguments> cartesian_construction() {
+    public static Stream<Arguments> construction() {
         return Stream.of(
                 // zero
                 arguments(0.0, Double.NaN, 0.0, 0.0),
@@ -47,7 +47,7 @@ public class ComplexTest {
     }
 
     @ParameterizedTest
-    @MethodSource("cartesian_construction")
+    @MethodSource("construction")
     void construction_is_correct_both_cartesian_and_polar(double modulus, double angle, double real, double imaginary) {
         Complex complex = complex(real, imaginary);
         assertEquals(real, complex.real);
