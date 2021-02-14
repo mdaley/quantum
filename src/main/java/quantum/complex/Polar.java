@@ -22,8 +22,17 @@ public class Polar {
 
     private Polar(double modulus, double angle, ComplexMarker marker) {
         this.modulus = modulus;
-        this.angle = angle;
+        this.angle = normalise(angle);
         this.marker = marker;
+    }
+
+    private double normalise(double angle) {
+        long k = (long) (angle / (2.0 * PI));
+        if (k > 0) {
+            return angle / (1 - k);
+        } else {
+            return angle;
+        }
     }
 
     public static Polar polar(double modulus, double angle) {
