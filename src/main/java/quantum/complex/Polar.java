@@ -87,12 +87,15 @@ public class Polar {
 
     private static double stringToAngle(String value) {
         int lastDigitIndex = value.length() - 1;
-        while(lastDigitIndex >= 0) {
+
+        while (lastDigitIndex >= 0) {
             char c = value.charAt(lastDigitIndex);
+
             if (c > 47 && c < 58) {
                 break;
             }
-        lastDigitIndex--;
+
+            lastDigitIndex--;
         }
 
         if (lastDigitIndex == -1 && PI_STRINGS.contains(value)) { // no digits, could be just π / PI
