@@ -65,10 +65,10 @@ public class Polar {
         return new Polar(modulus, angle, ComplexMarker.OTHER);
     }
 
-    public static Polar polar(String value) {
+    public static Polar polar(String input) {
 
-        if (value != null) {
-            String normalised = value.trim().replaceAll("[\\(\\)\\s]", "");
+        if (input != null) {
+            String normalised = input.trim().replaceAll("[\\(\\)\\s]", "");
             String[] parts = normalised.split(",");
 
             if (parts.length == 2) {
@@ -82,7 +82,8 @@ public class Polar {
             }
         }
 
-        throw new IllegalArgumentException("Not a valid polar complex number form ({double},{double}{optional-pi-symbol})");
+        throw new IllegalArgumentException(
+                String.format("'%s' is not a valid polar complex number form ({double},{double}{optional-pi-symbol})", input));
     }
 
     private static double stringToAngle(String value) {

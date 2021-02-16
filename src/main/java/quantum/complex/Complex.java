@@ -81,7 +81,8 @@ public class Complex {
         }
 
         if (!ok) {
-            throw new IllegalArgumentException("Not a valid complex number with form {double} +/- {double}i");
+            throw new IllegalArgumentException(
+                    String.format("'%s' is not a valid complex number with form {double} +/- {double}i", input));
         }
 
         return complex(real, imaginary);

@@ -124,6 +124,6 @@ public class ComplexTest {
     void creating_complex_number_from_string_throws_when_string_is_invalid(String str) {
         Exception thrown = assertThrows(IllegalArgumentException.class, () ->
                 complex("NULL".equals(str) ? null : str));
-        assertTrue(thrown.getMessage().contains("Not a valid complex number"));
+        assertTrue(thrown.getMessage().contains("not a valid complex number"));
     }
 }
