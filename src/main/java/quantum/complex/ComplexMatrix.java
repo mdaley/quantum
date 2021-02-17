@@ -181,6 +181,23 @@ public class ComplexMatrix {
         return result;
     }
 
+    public void scalarMultiplyInPlace(ComplexMatrix matrix) {
+        throwIfNotSameDimensions(matrix);
+
+        for (int m = 0; m < rows; m++) {
+            for (int n = 0; n < columns; n++) {
+                values[m][n] = values[m][n].multiply(matrix.values[m][n]);
+            }
+        }
+    }
+
+    public ComplexMatrix scalarMultiply(ComplexMatrix matrix) {
+        ComplexMatrix result = clone();
+        result.scalarMultiplyInPlace(matrix);
+
+        return result;
+    }
+
     public ComplexMatrix transpose() {
         Complex[][] transposeValues = new Complex[columns][rows];
         for (int m = 0; m < rows; m++) {
