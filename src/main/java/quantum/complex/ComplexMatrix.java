@@ -198,6 +198,21 @@ public class ComplexMatrix {
         return result;
     }
 
+    public void inverseInPlace() {
+        for (int m = 0; m < rows; m++) {
+            for (int n = 0; n < columns; n++) {
+                values[m][n] = complex(-values[m][n].real, -values[m][n].img);
+            }
+        }
+    }
+
+    public ComplexMatrix inverse() {
+        ComplexMatrix result = clone();
+        result.inverseInPlace();
+
+        return result;
+    }
+
     public ComplexMatrix transpose() {
         Complex[][] transposeValues = new Complex[columns][rows];
         for (int m = 0; m < rows; m++) {
