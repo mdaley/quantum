@@ -1,8 +1,10 @@
 package utils;
 
 import static quantum.complex.Complex.complex;
+import static quantum.complex.ComplexVector.complexColumnVector;
 
 import quantum.complex.Complex;
+import quantum.complex.ComplexMatrix;
 
 import java.util.Scanner;
 
@@ -43,5 +45,20 @@ public class Utils {
         }
 
         return number;
+    }
+
+    public static ComplexMatrix inputColumnVector(String msg) {
+        boolean ok = false;
+        ComplexMatrix matrix = null;
+
+        while(!ok) {
+            try {
+                matrix = complexColumnVector(input(msg));
+                ok = true;
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+
+        return matrix;
     }
 }

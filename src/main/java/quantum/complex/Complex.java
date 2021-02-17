@@ -214,7 +214,7 @@ public class Complex {
                         // the imaginary part is then a negative number that can be parsed
                         strb.append(c);
                     } else if (c == '+' || c == '-') {
-                        if (previous == 'e' || previous == 'E' || i == 0) {
+                        if (previous == 'e' || previous == 'E' || previous == 'Z') {
                             strb.append(c);
                         } else {
                             strb.append(' ');

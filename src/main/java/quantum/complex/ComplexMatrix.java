@@ -192,7 +192,7 @@ public class ComplexMatrix {
         return new ComplexMatrix(columns, rows, transposeValues);
     }
 
-    public ComplexVector row(int m) {
+    public ComplexMatrix row(int m) {
         if (m > rows -1 || m < 0) {
             throw new IllegalArgumentException(String.format("row %d does not exist", m));
         }
@@ -204,7 +204,7 @@ public class ComplexMatrix {
         return values[m];
     }
 
-    public ComplexVector column(int n) {
+    public ComplexMatrix column(int n) {
         if (n > columns - 1 || n < 0) {
             throw new IllegalArgumentException(String.format("column %d does not exist", n));
         }

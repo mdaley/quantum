@@ -78,7 +78,9 @@ public class ComplexTest {
                 arguments(-1, 0.0, "-1"),
                 arguments(0, -1, "-i"),
                 arguments(12.3, 0.0, "12.3"),
+                arguments(12.0, 0.0, "   12  "),
                 arguments(-12.3, 0.0, "-12.3"),
+                arguments(-17.0, 0.0, "  -17  "),
                 arguments(0.0, 1.6, "1.6i"),
                 arguments(0.0, -7, "-7i"),
                 // both real and imaginary
@@ -104,7 +106,7 @@ public class ComplexTest {
                 // odd spaces and other stuff
                 arguments(2.5, 1.6, "   2.5   +    1.6   i"),
                 arguments(-2.5e+34, 0.6e-10, "- 2.5 e +  34 + .  6 e  -10 i"),
-                arguments(-2.5e-2, -1.6e+2, "-2.5e-2 + -1.6e+2i"),
+                arguments(-2.5e-2, -1.6e+2, "   -2.5e-2 + -1.6e+2i"),
                 // scientific form special cases
                 arguments(2.3e-10, 0.0, "2.3e-10"),
                 arguments(0.0, -2.3e-10, "-2.3e-10i"),

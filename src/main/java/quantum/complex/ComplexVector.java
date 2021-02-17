@@ -3,26 +3,41 @@ package quantum.complex;
 import static quantum.complex.Complex.complex;
 import static quantum.complex.Polar.polar;
 
+/**
+ * A vector is just a 1 row or 1 column matrix.
+ */
 public class ComplexVector extends ComplexMatrix {
-    private final boolean isRowVector;
 
-    public static ComplexVector complexRowVector(int length, Complex[] data) {
-        return new ComplexVector(length, true, data);
+    // not to be used.
+    private ComplexVector() {
+        super(0, 0, null);
     }
 
-    public static ComplexVector complexColumnVector(int length, Complex[] data) {
-        return new ComplexVector(length, false, data);
+    public static ComplexMatrix complexRowVector(int length, Complex[] rowData) {
+        Complex[][] data = new Complex[1][];
+        data[0] = rowData;
+        return new ComplexMatrix(1, length, data);
     }
 
-    public static ComplexVector complexRowVector(String data) {
-        return complexVector(data, true);
+    public static ComplexMatrix complexColumnVector(int length, Complex[] columnData) {
+        Complex[][] data = new Complex[length][1];
+        for (int i = 0; i < length; i++) {
+            data[i][0] = columnData[i];
+        }
+        return new ComplexMatrix(length,1, data);
     }
 
-    public static ComplexVector complexColumnVector(String data) {
-        return complexVector(data, false);
+    public static ComplexMatrix complexRowVector(String data) {
+        Complex[] values = parseData(data);
+        return complexRowVector(values.length, values);
     }
 
-    private static ComplexVector complexVector(String data, boolean isRowVector) {
+    public static ComplexMatrix complexColumnVector(String data) {
+        Complex[] values = parseData(data);
+        return complexColumnVector(values.length, values);
+    }
+
+    private static Complex[] parseData(String data) {
         if (!data.contains("\\|\\|")) {
             String elements[] = data.split("\\|");
             if (elements.length > 0) {
@@ -36,42 +51,10 @@ public class ComplexVector extends ComplexMatrix {
                     }
                 }
 
-                return new ComplexVector(elements.length, isRowVector, values);
+                return values;
             }
         }
 
         throw new IllegalArgumentException("Invalid data - cannot create vector");
-    }
-
-    private ComplexVector(int length, boolean isRowVector, Complex[] data) {
-        super(isRowVector ? 1 : length, isRowVector ? length: 1, buildData(data, isRowVector, length));
-        this.isRowVector = isRowVector;
-    }
-
-    private static Complex[][] buildData(Complex[] rowData, boolean isRowVector, int length) {
-        Complex[][] data;
-
-        if (isRowVector) {
-            data = new Complex[1][length];
-            for (int i = 0; i < length; i++) {
-                data[0][i] = rowData[i];
-            }
-        } else {
-            data = new Complex[length][1];
-            for (int i = 0; i < length; i++) {
-                data[i][0] = rowData[i];
-            }
-        }
-
-        return data;
-    }
-
-    @Override
-    public ComplexVector transpose() {
-        if (isRowVector) {
-            return new ComplexVector(columns, false, rowData(0));
-        } else {
-            return new ComplexVector(rows, true, columnData(0));
-        }
     }
 }
