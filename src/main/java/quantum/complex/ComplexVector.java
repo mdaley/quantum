@@ -4,7 +4,8 @@ import static quantum.complex.Complex.complex;
 import static quantum.complex.Polar.polar;
 
 /**
- * A vector is just a 1 row or 1 column matrix.
+ * A vector is just a 1 row or 1 column matrix. Here are convenience `vector` methods but they all
+ * operate on and/or create vectors.
  */
 public class ComplexVector extends ComplexMatrix {
 

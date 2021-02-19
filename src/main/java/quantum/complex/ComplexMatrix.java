@@ -198,6 +198,26 @@ public class ComplexMatrix {
         return result;
     }
 
+    public static ComplexMatrix multiply(ComplexMatrix matrix1, ComplexMatrix matrix2) {
+        if (matrix1.columns != matrix2.rows) {
+            throw new IllegalArgumentException(String.format("Cannot multiply a [%d, %d] matrix by a [%d, %d] matrix"));
+        }
+
+        Complex[][] values = new Complex[matrix1.rows][matrix2.columns];
+
+        for (int n = 0; n < matrix1.rows; n++) {
+            for (int m = 0; m < matrix2.columns; m++) {
+                Complex c = complex(0, 0);
+                for (int i = 0; i < matrix1.columns; i++) {
+                    c = c.add(matrix1.values[n][i].multiply(matrix2.values[i][m]));
+                }
+                values[n][m] = c;
+            }
+        }
+
+        return complexMatrix(matrix1.rows, matrix2.columns, values);
+    }
+
     public void inverseInPlace() {
         for (int m = 0; m < rows; m++) {
             for (int n = 0; n < columns; n++) {

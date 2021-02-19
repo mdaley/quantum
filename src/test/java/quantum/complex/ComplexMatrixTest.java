@@ -1,11 +1,18 @@
 package quantum.complex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static quantum.complex.Complex.complex;
 import static quantum.complex.ComplexMatrix.complexMatrix;
+import static quantum.complex.ComplexMatrix.multiply;
 import static quantum.complex.Polar.polar;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 public class ComplexMatrixTest {
 
@@ -81,5 +88,23 @@ public class ComplexMatrixTest {
                 "┗    3.0 - 6.0i,           0.0,         -2.0i ┛";
 
         assertEquals(expectedString, COMPLEX_MATRIX.transpose().toPrettyString());
+    }
+
+    public static Stream<Arguments> matrix_multiply() {
+        return Stream.of(
+                // 2x2 x 2x2 -> 2x2
+                arguments(complexMatrix("1 + 2i | 1 || -i | 1"), complexMatrix("1 + 2i | 1 || -i | 1"), complexMatrix("1 | 0 || 0 | 1")),
+                // 1x3 x 3x1 -> 1x1
+                arguments(complexMatrix("3 - 4i"), complexMatrix("1 -i | 2 | -3i"), complexMatrix("1 || 1 || 1")),
+                // a more complex situation (2.35 from the book) 3x3 x 3x3 -> 3x3
+                arguments(complexMatrix("26-52i | 60+24i | 26 || 9 + 7i | 1 +29i | 14 || 48-21i | 15+22i | 20-22i"),
+                        complexMatrix("3+2i| 0 | 5-6i || 1 | 4+2i | i || 4-i| 0 | 4"),
+                        complexMatrix("5 | 2-i| 6-4i|| 0 | 4 + 5i | 2 || 7-4i | 2+7i | 0")));
+    }
+
+    @ParameterizedTest
+    @MethodSource("matrix_multiply")
+    void multiply_works_as_expected(ComplexMatrix expected, ComplexMatrix m1, ComplexMatrix m2) {
+        assertEquals(expected, multiply(m1, m2));
     }
 }
