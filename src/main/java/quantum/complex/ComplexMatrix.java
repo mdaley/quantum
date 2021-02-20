@@ -32,6 +32,28 @@ public class ComplexMatrix {
         return new ComplexMatrix(rows, columns, data);
     }
 
+    public static ComplexMatrix complexMatrix(int rows, int columns, Complex value) {
+        Complex[][] data = new Complex[rows][columns];
+        for (int m = 0; m < rows; m++) {
+            for (int n = 0; n < columns; n++) {
+                data[m][n] = value;
+            }
+        }
+
+        return complexMatrix(rows, columns, data);
+    }
+
+    public static ComplexMatrix identityMatrix(int size) {
+        Complex[][] data = new Complex[size][size];
+        for (int m = 0; m < size; m++) {
+            for (int n = 0; n < size; n++) {
+                data[m][n] = m == n ? Complex.ONE : Complex.ZERO;
+            }
+        }
+
+        return complexMatrix(size, size, data);
+    }
+
     public static ComplexMatrix complexMatrix(String data) {
         int rowCount;
         int colCount = -1;
@@ -200,7 +222,8 @@ public class ComplexMatrix {
 
     public static ComplexMatrix multiply(ComplexMatrix matrix1, ComplexMatrix matrix2) {
         if (matrix1.columns != matrix2.rows) {
-            throw new IllegalArgumentException(String.format("Cannot multiply a [%d, %d] matrix by a [%d, %d] matrix"));
+            throw new IllegalArgumentException(String.format("Cannot multiply a [%d, %d] matrix by a [%d, %d] matrix",
+                    matrix1.rows, matrix1.columns, matrix2.rows, matrix2.columns));
         }
 
         Complex[][] values = new Complex[matrix1.rows][matrix2.columns];

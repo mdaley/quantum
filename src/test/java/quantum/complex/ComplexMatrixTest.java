@@ -1,9 +1,12 @@
 package quantum.complex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static quantum.complex.Complex.complex;
 import static quantum.complex.ComplexMatrix.complexMatrix;
+import static quantum.complex.ComplexMatrix.identityMatrix;
 import static quantum.complex.ComplexMatrix.multiply;
 import static quantum.complex.Polar.polar;
 
@@ -54,30 +57,30 @@ public class ComplexMatrixTest {
 
     @Test
     void add_and_add_in_place_work_correctly() {
-        ComplexMatrix a = complexMatrix("1 + i| 2 - i||2 + i| 3 - 2i");
-        ComplexMatrix b = complexMatrix("i| 2 + 2i||i|1");
+        ComplexMatrix a = complexMatrix("1 + i | 2 - i || 2 + i | 3 - 2i");
+        ComplexMatrix b = complexMatrix("i | 2 + 2i || i| 1");
 
-        assertEquals(complexMatrix("1 + 2i| 4 + i||2 + 2i| 4 - 2i"), a.add(b));
+        assertEquals(complexMatrix("1 + 2i | 4 + i || 2 + 2i | 4 - 2i"), a.add(b));
 
         a.addInPlace(b);
-        assertEquals(complexMatrix("1 + 2i| 4 + i||2 + 2i| 4 - 2i"), a);
+        assertEquals(complexMatrix("1 + 2i | 4 + i || 2 + 2i | 4 - 2i"), a);
     }
 
     @Test
     void subtract_and_subtract_in_place_work_correctly() {
-        ComplexMatrix a = complexMatrix("1 + i| 2 - i||2 + i| 3 - 2i");
-        ComplexMatrix b = complexMatrix("i| 2 + 2i||i|1");
+        ComplexMatrix a = complexMatrix("1 + i | 2 - i || 2 + i | 3 - 2i");
+        ComplexMatrix b = complexMatrix("i | 2 + 2i || i | 1");
 
-        assertEquals(complexMatrix("1| -3i||2 | 2 - 2i"), a.subtract(b));
+        assertEquals(complexMatrix("1| -3i || 2 | 2 - 2i"), a.subtract(b));
 
         a.subtractInPlace(b);
-        assertEquals(complexMatrix("1 | -3i||2 | 2 - 2i"), a);
+        assertEquals(complexMatrix("1 | -3i || 2 | 2 - 2i"), a);
     }
 
     @Test
     void transpose_works_correctly() {
-        ComplexMatrix a = complexMatrix("1 + i| 2 - i||2 + i| 3 - 2i");
-        ComplexMatrix b = complexMatrix("1 + i| 2 + i||2 - i| 3 - 2i");
+        ComplexMatrix a = complexMatrix("1 + i | 2 - i || 2 + i | 3 - 2i");
+        ComplexMatrix b = complexMatrix("1 + i | 2 + i || 2 - i | 3 - 2i");
 
         assertEquals(b, a.transpose());
 
@@ -98,13 +101,38 @@ public class ComplexMatrixTest {
                 arguments(complexMatrix("3 - 4i"), complexMatrix("1 -i | 2 | -3i"), complexMatrix("1 || 1 || 1")),
                 // a more complex situation (2.35 from the book) 3x3 x 3x3 -> 3x3
                 arguments(complexMatrix("26-52i | 60+24i | 26 || 9 + 7i | 1 +29i | 14 || 48-21i | 15+22i | 20-22i"),
-                        complexMatrix("3+2i| 0 | 5-6i || 1 | 4+2i | i || 4-i| 0 | 4"),
-                        complexMatrix("5 | 2-i| 6-4i|| 0 | 4 + 5i | 2 || 7-4i | 2+7i | 0")));
+                        complexMatrix("3+2i | 0 | 5-6i || 1 | 4+2i | i || 4-i| 0 | 4"),
+                        complexMatrix("5 | 2-i | 6-4i || 0 | 4 + 5i | 2 || 7-4i | 2+7i | 0")));
     }
 
     @ParameterizedTest
     @MethodSource("matrix_multiply")
     void multiply_works_as_expected(ComplexMatrix expected, ComplexMatrix m1, ComplexMatrix m2) {
         assertEquals(expected, multiply(m1, m2));
+    }
+
+    public static Stream<Arguments> matrix_multiply_throws() {
+        return Stream.of(
+                arguments(complexMatrix(1, 2, Complex.ONE), identityMatrix(1)),
+                arguments(complexMatrix(1, 1, Complex.ONE), complexMatrix(2, 1, Complex.MINUS_I)),
+                arguments(complexMatrix(1, 3, Complex.ZERO), complexMatrix(2, 3, Complex.I)),
+                arguments(identityMatrix(7), complexMatrix(6, 7, Complex.I)));
+    }
+
+    @ParameterizedTest
+    @MethodSource("matrix_multiply_throws")
+    void multiplying_incompatible_matrices_throws(ComplexMatrix m1, ComplexMatrix m2) {
+        Throwable t = assertThrows(IllegalArgumentException.class, () -> multiply(m1, m2));
+        assertTrue(t.getMessage().contains("Cannot multiply"));
+    }
+
+    @Test
+    void initialise_with_all_same_value() {
+        assertEquals(complexMatrix("i | i | i || i | i | i"), complexMatrix(2, 3, Complex.I));
+    }
+
+    @Test
+    void identity_matrix_initialised_correctly() {
+        assertEquals(complexMatrix("1 | 0 | 0 || 0 | 1 | 0 || 0 | 0 | 1"), identityMatrix(3));
     }
 }
