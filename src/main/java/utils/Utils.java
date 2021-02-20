@@ -1,6 +1,7 @@
 package utils;
 
 import static quantum.complex.Complex.complex;
+import static quantum.complex.ComplexMatrix.complexMatrix;
 import static quantum.complex.ComplexVector.complexColumnVector;
 
 import quantum.complex.Complex;
@@ -41,6 +42,7 @@ public class Utils {
                 number = complex(input(msg));
                 ok = true;
             } catch (IllegalArgumentException ignored) {
+                System.out.println("Not a valid comple number.");
             }
         }
 
@@ -56,6 +58,23 @@ public class Utils {
                 matrix = complexColumnVector(input(msg));
                 ok = true;
             } catch (IllegalArgumentException ignored) {
+                System.out.println("Not a valid column vector.");
+            }
+        }
+
+        return matrix;
+    }
+
+    public static ComplexMatrix inputMatrix(String msg) {
+        boolean ok = false;
+        ComplexMatrix matrix = null;
+
+        while(!ok) {
+            try {
+                matrix = complexMatrix(input(msg));
+                ok = true;
+            } catch (IllegalArgumentException ignored) {
+                System.out.println("Not a valid matrix.");
             }
         }
 
