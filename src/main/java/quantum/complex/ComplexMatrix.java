@@ -267,6 +267,26 @@ public class ComplexMatrix {
         return new ComplexMatrix(columns, rows, transposeValues);
     }
 
+    public void conjugateInPlace() {
+        for (int m = 0; m < rows; m++) {
+            for (int n = 0; n < columns; n++) {
+                values[m][n] = values[m][n].conjugate();
+            }
+        }
+    }
+
+    public ComplexMatrix conjugate() {
+        ComplexMatrix result = clone();
+        result.conjugateInPlace();
+        return result;
+    }
+
+    public ComplexMatrix adjoint() {
+        ComplexMatrix result = transpose();
+        result.conjugateInPlace();
+        return result;
+    }
+
     public ComplexMatrix row(int m) {
         if (m > rows -1 || m < 0) {
             throw new IllegalArgumentException(String.format("row %d does not exist", m));

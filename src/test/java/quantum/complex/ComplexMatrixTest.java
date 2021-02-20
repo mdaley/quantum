@@ -135,4 +135,20 @@ public class ComplexMatrixTest {
     void identity_matrix_initialised_correctly() {
         assertEquals(complexMatrix("1 | 0 | 0 || 0 | 1 | 0 || 0 | 0 | 1"), identityMatrix(3));
     }
+
+    @Test
+    void rows_and_columns_can_be_retrieved() {
+        ComplexMatrix m = identityMatrix(5);
+
+        assertEquals(complexMatrix(" 1 | 0 | 0 | 0 | 0"), m.row(0));
+        assertEquals(complexMatrix(" 0 | 0 | 0 | 1 | 0"), m.row(3));
+        assertEquals(complexMatrix(" 0 || 1 || 0 || 0 || 0"), m.column(1));
+        assertEquals(complexMatrix(" 0 || 0 || 0 || 0 || 1"), m.column(4));
+    }
+
+    @Test
+    void adjoint_works_correctly() {
+        assertEquals(complexMatrix("1 + i | 2 | 2 - i || i | 0 | 3"), complexMatrix("1 - i | -i || 2 | 0 || 2 + i | 3").adjoint());
+    }
 }
+
