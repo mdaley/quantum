@@ -287,6 +287,18 @@ public class ComplexMatrix {
         return result;
     }
 
+    public double innerProduct() {
+        ComplexMatrix adjoint = adjoint();
+        double result = 0.0;
+        for (int m = 0; m < rows; m++) {
+            for (int i = 0; i < columns; i++) {
+                result += values[m][i].multiply(adjoint.values[i][m]).real;
+            }
+        }
+
+        return result;
+    }
+
     public ComplexMatrix row(int m) {
         if (m > rows -1 || m < 0) {
             throw new IllegalArgumentException(String.format("row %d does not exist", m));

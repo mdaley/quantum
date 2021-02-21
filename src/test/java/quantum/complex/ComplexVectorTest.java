@@ -47,4 +47,10 @@ public class ComplexVectorTest {
                         "┃       1.0i ┃\n" +
                         "┗ 3.0 - 6.0i ┛", vector.transpose().transpose().toPrettyString());
     }
+
+    @Test
+    void inner_product_calculated_correctly() {
+        ComplexMatrix vector = complexColumnVector("1+i|(2,0)|i|3-6i");
+        assertEquals(52, vector.innerProduct());
+    }
 }

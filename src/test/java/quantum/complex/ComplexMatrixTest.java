@@ -150,5 +150,11 @@ public class ComplexMatrixTest {
     void adjoint_works_correctly() {
         assertEquals(complexMatrix("1 + i | 2 | 2 - i || i | 0 | 3"), complexMatrix("1 - i | -i || 2 | 0 || 2 + i | 3").adjoint());
     }
+
+    @Test
+    void inner_product_calculated_correctly() {
+        ComplexMatrix matrix = complexMatrix("1+i|(2,0)||i|3-6i");
+        assertEquals(52, matrix.innerProduct());
+    }
 }
 

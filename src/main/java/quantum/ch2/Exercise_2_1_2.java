@@ -7,7 +7,7 @@ import utils.Utils;
 public class Exercise_2_1_2 extends Exercise {
     @Override
     public String title() {
-        return "Inverse of a vector - ";
+        return "Inverse of a vector";
     }
 
     @Override
