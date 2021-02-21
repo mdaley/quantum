@@ -299,6 +299,48 @@ public class ComplexMatrix {
         return result;
     }
 
+    /**
+     * A complex matrix is Hermitian if it's adjoint (i.e. transposed conjugate) is equal to the matrix itself.
+     * The matrix has to be square and it's diagonal has to be only real.
+     *
+     * @return true if the matrix is Hermitian, otherwise false
+     */
+    public boolean isHermitian() {
+        return isSquareAndDiagonalOnlyReal() && equals(adjoint());
+    }
+
+    /**
+     * A complex matrix is unitary if it, multiplied by it's adjoint is equal to the identity matrix of the same
+     * (square) size.
+     */
+    public boolean isUnitary() {
+        if (!isSquare()) {
+            return false;
+        }
+
+        ComplexMatrix matrix = multiply(this, adjoint());
+
+        return matrix.equals(identityMatrix(rows));
+    }
+
+    public boolean isSquare() {
+        return rows == columns;
+    }
+
+    public boolean isSquareAndDiagonalOnlyReal() {
+        if (!isSquare()) {
+            return false;
+        }
+
+        for (int i = 0; i < rows; i++) {
+            if (values[i][i].img != 0.0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public ComplexMatrix row(int m) {
         if (m > rows -1 || m < 0) {
             throw new IllegalArgumentException(String.format("row %d does not exist", m));

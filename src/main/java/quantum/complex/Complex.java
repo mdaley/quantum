@@ -1,6 +1,7 @@
 package quantum.complex;
 
 import static java.lang.Math.PI;
+import static quantum.complex.ComplexEnvironment.floor;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -22,14 +23,14 @@ public class Complex {
     private final ComplexMarker marker;
 
     private Complex(double real, double img, ComplexMarker marker) {
-        this.real = fixupMinusZero(real);
-        this.img = fixupMinusZero(img);
+        this.real = floor(real);
+        this.img = floor(img);
         this.marker = marker;
     }
 
     // let's avoid the problem that Double.equals(0.0, -0.0) doesn't return true! Avoids problem in Complex.equals
     // where 1.0 + 0.0i != 1.0 - 0.0i.
-    private double fixupMinusZero(double value) {
+    private static double fixupMinusZero(double value) {
         return value == -0.0 ? 0.0 : value;
     }
 
@@ -123,6 +124,10 @@ public class Complex {
         return complex(real * value.real - img * value.img, real * value.img + img * value.real);
     }
 
+    public Complex multiply(double value) {
+        return multiply(complex(value, 0.0));
+    }
+
     public Complex reciprocal() {
         return reciprocal(this);
     }
@@ -132,7 +137,15 @@ public class Complex {
         return complex(value.real / divisor, - value.img / divisor);
     }
 
+    private static Complex reciprocal(double value) {
+        return reciprocal(complex(value, 0.0));
+    }
+
     public Complex divide(Complex value) {
+        return multiply(reciprocal(value));
+    }
+
+    public Complex divide(double value) {
         return multiply(reciprocal(value));
     }
 

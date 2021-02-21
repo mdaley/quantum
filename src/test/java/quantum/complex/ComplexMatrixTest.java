@@ -1,10 +1,13 @@
 package quantum.complex;
 
+import static java.lang.Math.sqrt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static quantum.complex.Complex.complex;
+import static quantum.complex.ComplexEnvironment.setFloor;
 import static quantum.complex.ComplexMatrix.complexMatrix;
 import static quantum.complex.ComplexMatrix.identityMatrix;
 import static quantum.complex.ComplexMatrix.multiply;
@@ -156,5 +159,31 @@ public class ComplexMatrixTest {
         ComplexMatrix matrix = complexMatrix("1+i|(2,0)||i|3-6i");
         assertEquals(52, matrix.innerProduct());
     }
-}
 
+    @Test
+    void is_hermitian_works_orrectly() {
+        assertTrue(complexMatrix("654").isHermitian());
+        assertTrue(complexMatrix("7 | 6 + 5i || 6 - 5i | -4").isHermitian());
+        assertTrue(complexMatrix("5 | 4 + 5i | 6 - 16i || 4 - 5i | 13 | 7 || 6 + 16i | 7 | -2.1").isHermitian());
+
+        assertFalse(complexMatrix("i").isHermitian());
+        assertFalse(complexMatrix("1 | 1").isHermitian());
+        assertFalse(complexMatrix("1 || 1").isHermitian());
+        assertFalse(complexMatrix("i5 | 4 + 5i | 6 - 16i | 2 || 4 - 5i | 13 | 7 | 2 || 6 + 16i | 7 | -2.1 | i").isHermitian());
+    }
+
+    @Test
+    void is_unitary_works_correctly() {
+        // testing for zero only works reliably if a noise floor is set below which doubles are set to zero. If you don't
+        // do this, approximations in calculations will result in values not actually being zero when, theoretically,
+        // they should be. So, isUnitary would never succeed, even when it should.
+        setFloor(1e-15);
+
+        Complex[][] data = new Complex[][] {
+                {complex("1+i").divide(2), Complex.I.divide( sqrt(3)), complex("3+i").divide(2 * sqrt(15))},
+                {complex("-0.5"), Complex.ONE.divide(sqrt(3)), complex("4+3i").divide(2 * sqrt(15))},
+                {complex("0.5"), Complex.MINUS_I.divide(sqrt(3)), complex("5i").divide((2 * sqrt(15)))}
+        };
+        assertTrue(complexMatrix(3, 3, data).isUnitary());
+    }
+}

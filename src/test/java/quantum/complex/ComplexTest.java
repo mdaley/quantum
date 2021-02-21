@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static quantum.complex.Complex.complex;
+import static quantum.complex.ComplexEnvironment.setFloor;
 import static quantum.complex.CustomAsserts.assertClose;
 import static quantum.complex.Polar.polar;
 
@@ -49,6 +50,8 @@ public class ComplexTest {
     @ParameterizedTest
     @MethodSource("construction")
     void construction_is_correct_both_cartesian_and_polar(double modulus, double angle, double real, double imaginary) {
+        setFloor(Double.MIN_VALUE);
+
         Complex complex = complex(real, imaginary);
         assertEquals(real, complex.real);
         assertEquals(imaginary, complex.img);
