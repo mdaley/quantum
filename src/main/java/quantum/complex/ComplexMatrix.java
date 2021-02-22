@@ -241,6 +241,10 @@ public class ComplexMatrix {
         return complexMatrix(matrix1.rows, matrix2.columns, values);
     }
 
+    public ComplexMatrix multiply(ComplexMatrix matrix) {
+        return multiply(this, matrix);
+    }
+
     public void inverseInPlace() {
         for (int m = 0; m < rows; m++) {
             for (int n = 0; n < columns; n++) {
@@ -297,6 +301,23 @@ public class ComplexMatrix {
         }
 
         return result;
+    }
+
+    public static ComplexMatrix tensorProduct(ComplexMatrix m1, ComplexMatrix m2) {
+        int tensorRows = m1.rows * m2.rows;
+        int tensorColumns = m1.columns * m2.columns;
+        Complex[][] data = new Complex[tensorRows][tensorColumns];
+        for (int m = 0; m < m1.rows; m++) {
+            for (int p = 0; p < m2.rows; p++) {
+                for (int n = 0; n < m1.columns; n++) {
+                    for (int q = 0; q < m2.columns; q++) {
+                        data[m * m2.rows + p][n * m2.columns + q] = m1.values[m][n].multiply(m2.values[p][q]);
+                    }
+                }
+            }
+        }
+
+        return complexMatrix(tensorRows, tensorColumns, data);
     }
 
     /**

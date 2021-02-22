@@ -11,6 +11,7 @@ import static quantum.complex.ComplexEnvironment.setFloor;
 import static quantum.complex.ComplexMatrix.complexMatrix;
 import static quantum.complex.ComplexMatrix.identityMatrix;
 import static quantum.complex.ComplexMatrix.multiply;
+import static quantum.complex.ComplexMatrix.tensorProduct;
 import static quantum.complex.Polar.polar;
 
 import org.junit.jupiter.api.Test;
@@ -185,5 +186,35 @@ public class ComplexMatrixTest {
                 {complex("0.5"), Complex.MINUS_I.divide(sqrt(3)), complex("5i").divide((2 * sqrt(15)))}
         };
         assertTrue(complexMatrix(3, 3, data).isUnitary());
+    }
+
+    public static Stream<Arguments> tensor_product() {
+
+        return Stream.of(
+                arguments("0", "0", "0"),
+                arguments("-4", "2i", "2i"),
+                arguments("i | 2i || -i | -2i", "1| 2", "i || -i"),
+                // exercise 2.7.1
+                arguments("-3 || 6 || -4 || 8 || -7 || 14", "3 || 4|| 7", "-1 || 2"),
+                // exercise 2.7.3
+                arguments("3 + 2i | 1 + 18i | 29 - 11i | 5 - 1i | 19 + 17i | 18 - 40i | 2i | -8 + 6i | 14 + 10i ||" +
+                        " 26 + 26i | 18 + 12i | -4 + 19i | 52 | 30 - 6i | 15 + 23i | -4 + 20i | 12i | -10 + 4i ||" +
+                        " 0 | 3 + 2i | -12 + 31i | 0 | 5 - 1i | 19 + 43i | 0 | 2i | -18 + 4i ||" +
+                        " 0 | 0 | 0 | 12 | 36 + 48i | 60 - 84i | 6 - 3i | 30 + 15i | 9 - 57i ||" +
+                        " 0 | 0 | 0 | 120 + 24i | 72 | 24 + 60i | 66 - 18i | 36 - 18i | 27 + 24i ||" +
+                        " 0 | 0 | 0 | 0 | 12 | 24 + 108i | 0 | 6 - 3i | 39 + 48i ||" +
+                        " 2 | 6 + 8i | 10 - 14i | 4 + 4i | -4 + 28i | 48 - 8i | 9 + 3i | 15 + 45i | 66 - 48i ||" +
+                        " 20 + 4i | 12 | 4 + 10i | 32 + 48i | 24 + 24i | -12 + 28i | 84 + 48i | 54 + 18i | 3 + 51i ||" +
+                        " 0 | 2 | 4 + 18i | 0 | 4 + 4i | -28 + 44i | 0 | 9 + 3i | -9 + 87i",
+                        "3 + 2i | 5 - i | 2i || 0 | 12 | 6 - 3i || 2 | 4 + 4i | 9 + 3i",
+                        "1 | 3 + 4i | 5 - 7i || 10 + 2i | 6 | 2 + 5i || 0 | 1 | 2 + 9i"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("tensor_product")
+    void tensor_product_works_correctly(String result, String m1, String m2) {
+        ComplexMatrix actual = tensorProduct(complexMatrix(m1), complexMatrix(m2));
+        assertEquals(complexMatrix(result), actual);
+        System.out.println(actual.toPrettyString());
     }
 }
