@@ -55,7 +55,7 @@ public final class Reference implements Comparable<Reference> {
     public int compareTo(Reference o) {
         if (o.main == main && o.minor == minor && o.point == point) {
             return 0;
-        } else if (o.main < main || o.minor < minor || o.point < point) {
+        } else if (o.main < main || (o.main == main && o.minor < minor) || (o.main == main && o.minor == minor && o.point < point)) {
             return 1;
         } else {
             return -1;
