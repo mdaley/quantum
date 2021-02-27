@@ -65,6 +65,15 @@ public class Utils {
         return matrix;
     }
 
+    public static int inputInteger(String msg) {
+        while(true) {
+            try {
+                return Integer.parseInt(input(msg));
+            } catch (NumberFormatException e) {
+            }
+        }
+    }
+
     public static ComplexMatrix inputMatrix(String msg) {
         boolean ok = false;
         ComplexMatrix matrix = null;
