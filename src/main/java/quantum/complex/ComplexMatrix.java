@@ -325,6 +325,18 @@ public class ComplexMatrix {
         return complexMatrix(tensorRows, tensorColumns, data);
     }
 
+    public Complex sum() {
+        double real = 0, img = 0;
+        for (int m = 0; m < rows; m++) {
+            for (int n = 0; n < columns; n++) {
+                real += values[m][n].real;
+                img += values[m][n].img;
+            }
+        }
+
+        return complex(real, img);
+    }
+
     /**
      * A complex matrix is Hermitian if it's adjoint (i.e. transposed conjugate) is equal to the matrix itself.
      * The matrix has to be square and it's diagonal has to be only real.
