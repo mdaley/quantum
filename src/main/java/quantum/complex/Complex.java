@@ -177,7 +177,11 @@ public class Complex {
     }
 
     public String toString(BiFunction<Double, Double, String> formatter) {
-        return formatter.apply(real, img);
+        if (formatter == null) {
+            return toString();
+        } else {
+            return formatter.apply(real, img);
+        }
     }
 
     @Override

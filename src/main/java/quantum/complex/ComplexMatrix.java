@@ -9,12 +9,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class ComplexMatrix {
 
-    final int rows;
-    final int columns;
-    private final Complex[][] values;
+    public final int rows;
+    public final int columns;
+    public final Complex[][] values;
 
     @Override
     protected ComplexMatrix clone() {
@@ -117,6 +118,10 @@ public class ComplexMatrix {
         }
 
         return strb.toString();
+    }
+
+    public String toString(Function<Complex[][], String> formatter) {
+        return formatter.apply(values);
     }
 
     public String toPrettyString() {
@@ -328,6 +333,22 @@ public class ComplexMatrix {
      */
     public boolean isHermitian() {
         return isSquareAndDiagonalOnlyReal() && equals(adjoint());
+    }
+
+    /**
+     * A matrix is boolean is if only contains ones and zeros.
+     * @return
+     */
+    public boolean isBoolean() {
+        for (int m = 0; m < rows; m++) {
+            for (int n = 0; n < columns; n++) {
+                if (values[m][n] != Complex.ONE && values[m][n] != Complex.ZERO) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
