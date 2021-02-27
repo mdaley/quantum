@@ -16,8 +16,6 @@ public class Exercise_3_1_1 extends Exercise {
         return null;
     }
 
-
-
     @Override
     public void execute() {
         ComplexMatrix initialState = Utils.inputColumnVector("Enter the starting state vector: \n");

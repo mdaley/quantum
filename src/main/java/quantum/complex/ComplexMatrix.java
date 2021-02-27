@@ -18,7 +18,7 @@ public class ComplexMatrix {
     public final Complex[][] values;
 
     @Override
-    protected ComplexMatrix clone() {
+    public ComplexMatrix clone() {
         Complex[][] data = new Complex[rows][columns];
         for (int m = 0; m < rows; m++) {
             for (int n = 0; n < columns; n++) {
