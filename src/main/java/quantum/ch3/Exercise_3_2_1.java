@@ -1,89 +1,120 @@
 package quantum.ch3;
 
+import static quantum.complex.ComplexMatrix.complexMatrix;
+import static quantum.complex.ComplexVector.complexColumnVector;
+
 import quantum.Exercise;
 import quantum.complex.Complex;
 import quantum.complex.ComplexMatrix;
+import quantum.complex.ComplexVector;
 import utils.Utils;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.function.Function;
 
 public class Exercise_3_2_1 extends Exercise {
     public static final NumberFormat DP3 = new DecimalFormat("0.####");
-    public static final NumberFormat DP_3_SCI = new DecimalFormat("0.####E0");
-
     @Override
     public String title() {
-        return "Multiply matrix by itself n-times";
+        return "Probabilistic state system";
     }
 
     @Override
     public String description() {
-        return "Multiplying doubly stochastic probabilistic matrices (exercise 3.2.6)";
+        return "null";
     }
 
     @Override
     public void execute() {
-        boolean ok = false;
-        ComplexMatrix matrix = null;
+        ComplexMatrix initialState = null;
+        ComplexMatrix stateChange = null;
 
-        while (!ok) {
-            matrix = Utils.inputMatrix("Enter a probabilistic doubly stochastic matrix: \n");
-            if (isDoublyStochastic(matrix)) {
-                ok = true;
-            } else {
-                System.out.println("The matrix must be square and it must be doubly stochastic, that is the " +
-                        "each row must sum to 1, as must each column.\n");
+        if (!Utils.inputBoolean("Use canned values ")) {
+            initialState = Utils.inputColumnVector("Enter the starting state vector: \n");
+
+            boolean notOk = true;
+
+            boolean doublyStochasticOnly = Utils.inputBoolean("Do you want to be strict (doubly stochastic)? ");
+
+            while (notOk) {
+                stateChange = Utils.inputMatrix("Enter the probabilistic state change matrix: \n");
+                if (stateChange.rows == initialState.rows
+                        && ((doublyStochasticOnly && stateChange.isDoublyStochastic())
+                        || (stateChange.isSquare() && columnsAddToOne(stateChange)))) {
+                    notOk = false;
+                } else {
+                    if (doublyStochasticOnly) {
+                        System.out.println("The matrix must be doubly stochastic, that is each row and each column must have a sum\n" +
+                                "of 1. Please try again.\n");
+                    } else {
+                        System.out.println("The matrix must be square and columns must each add up to one.");
+                    }
+                }
             }
-        }
-
-        int times = Utils.inputInteger("Power to multiply matrix to: ");
-
-        Function<Complex, String> formatter = c -> {
-            if (c.img == 0.0) {
-                return niceFormat(c.real);
-            } else if (c.real == 0.0) {
-                return niceFormat(c.img) + "i";
-            } else {
-                return String.format("%s %s %si", niceFormat(c.real), c.img < 0 ? "-" : "+", niceFormat(Math.abs(c.img)));
-            }
-        };
-
-        ComplexMatrix multiplied = matrix.clone();
-
-        for (int i = 0; i < times; i++) {
-            System.out.println("Power " + (i + 1));
-            System.out.println(multiplied.toPrettyString(formatter));
-            System.out.println();
-
-            multiplied = multiplied.multiply(matrix);
-        }
-    }
-
-    private String niceFormat(double d) {
-        if (Math.abs(d) < 0.0001 || Math.abs(d) > 1E6) {
-            return DP_3_SCI.format(d);
         } else {
-            return DP3.format(d);
+            initialState = complexColumnVector("1|0|0|0|0|0|0|0");
+            stateChange = complexMatrix("0|0|0|0|0|0|0|0||" +
+                    "0.5|0|0|0|0|0|0|0||" +
+                    "0.5|0|0|0|0|0|0|0||" +
+                    "0|0.33333|0|1|0|0|0|0||" +
+                    "0|0.33333|0|0|1|0|0|0||" +
+                    "0|0.33333|0.33333|0|0|1|0|0||" +
+                    "0|0|0.33333|0|0|0|1|0||" +
+                    "0|0|0.33333|0|0|0|0|1");
         }
+
+        int steps = Utils.inputInteger("Number of steps to process: ");
+
+        ComplexMatrix[] states = new ComplexMatrix[steps + 1];
+        int[] widths = new int[steps + 1];
+
+        for (int i = 0; i < initialState.rows; i++) {
+            widths[0] = Math.max(widths[0], DP3.format(initialState.values[i][0].real).length());
+        }
+
+        states[0] = initialState;
+
+        for (int i = 1; i < steps + 1; i++) {
+            states[i] = stateChange.multiply(states[i - 1]);
+
+            for (int j = 0; j < states[i].rows; j++) {
+                widths[i] = Math.max(widths[i], DP3.format(states[i].values[j][0].real).length());
+            }
+        }
+
+        System.out.print("States after each tick:\nticks  ");
+
+        for (int i = 0; i < steps + 1; i++) {
+            System.out.printf("%" + widths[i] + "s ", i);
+        }
+
+        System.out.println();
+
+        for (int j = 0; j < initialState.rows; j++) {
+            System.out.print(j == 0 ? "states " : "       ");
+            for (int i = 0; i < steps + 1; i++) {
+                String real = DP3.format(states[i].values[j][0].real);
+                System.out.printf("%" + widths[i] + "s ", real);
+            }
+            System.out.println();
+        }
+
+        System.out.printf("count  ");
+
+        for (int i = 0; i < steps + 1; i++) {
+            System.out.printf("%" + widths[i] + "s ", (int) Math.round(states[i].sum().real));
+        }
+
+        System.out.println();
     }
 
-    private boolean isDoublyStochastic(ComplexMatrix matrix) {
-        if (!matrix.isSquare()) {
-            return false;
-        }
-
-        for (int i = 0; i < matrix.rows; i++) {
-            if (!isVeryClose(matrix.row(i).sum(), Complex.ONE) || !isVeryClose(matrix.column(i).sum(), Complex.ONE)) {
+    private boolean columnsAddToOne(ComplexMatrix m) {
+        for (int n = 0; n < m.columns; n++) {
+            if (!m.column(n).sum().equals(Complex.ONE, 1E-3)) {
                 return false;
             }
         }
 
         return true;
-    }
-
-    private boolean isVeryClose(Complex a, Complex b) {
-        return Math.abs(a.real - b.real) < 1e-10 && Math.abs(a.img - b.img) < 1e-10;
     }
 }

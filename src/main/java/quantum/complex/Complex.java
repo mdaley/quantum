@@ -161,6 +161,12 @@ public class Complex {
         return Double.compare(complex.real, real) == 0 && Double.compare(complex.img, img) == 0;
     }
 
+    public boolean equals(Complex o, double accuracy) {
+        if (this == o) return true;
+        if (o == null) return false;
+        return Math.abs(o.real - real) < accuracy && Math.abs(o.img - img) < accuracy;
+    }
+
     @Override
     public String toString() {
         if (real == 0.0 && img == 0.0) {

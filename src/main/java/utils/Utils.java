@@ -7,7 +7,9 @@ import static quantum.complex.ComplexVector.complexColumnVector;
 import quantum.complex.Complex;
 import quantum.complex.ComplexMatrix;
 
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Utils {
     private static Scanner scanner = null;
@@ -88,5 +90,19 @@ public class Utils {
         }
 
         return matrix;
+    }
+
+    public static boolean inputBoolean(String msg) {
+        while(true) {
+            String input = input(msg);
+            if (input != null) {
+                String value = input.toLowerCase(Locale.getDefault());
+                if (Set.of("true", "yes", "y", "t").contains(value)) {
+                  return true;
+                } else if (Set.of("false", "no", "n", "f").contains(value)) {
+                return false;
+                }
+            }
+        }
     }
 }

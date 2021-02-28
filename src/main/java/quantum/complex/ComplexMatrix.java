@@ -453,4 +453,33 @@ public class ComplexMatrix {
         result = 31 * result + Arrays.hashCode(values);
         return result;
     }
+
+    /**
+     * Checks if the matrix doubly stochastic, that is: it is square and the sum of each column and each
+     * row is one.
+     * @param accuracy allow this small deviation + or - from 1 when checking rows and column sums.
+     * @return true if the matrix is doubly stochastic.
+     */
+    public boolean isDoublyStochastic(double accuracy) {
+        if (!isSquare()) {
+            return false;
+        }
+
+        for (int i = 0; i < rows; i++) {
+            if (!row(i).sum().equals(Complex.ONE, accuracy) || column(i).sum().equals(Complex.ONE, accuracy)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if the matrix doubly stochastic, that is: it is square and the sum of each column and each
+     * row is one (to within a small amount of 1E-10).
+     * @return true if the matrix is doubly stochastic.
+     */
+    public boolean isDoublyStochastic() {
+        return isDoublyStochastic(1e-10);
+    }
 }
