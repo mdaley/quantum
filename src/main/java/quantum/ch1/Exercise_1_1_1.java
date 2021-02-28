@@ -5,7 +5,7 @@ import static utils.Utils.inputComplexNumber;
 import quantum.Exercise;
 import quantum.complex.Complex;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Exercise_1_1_1 extends Exercise {
 
@@ -24,13 +24,13 @@ public class Exercise_1_1_1 extends Exercise {
         Complex n1 = inputComplexNumber( "First number: ");
         Complex n2 = inputComplexNumber("Second number: ");
 
-        BiFunction<Double, Double, String> formatter = (r, i) -> {
-            if (i == 0.0) {
-                return Double.toString(r);
-            } else if (r == 0.0) {
-                return i + "i";
+        Function<Complex, String> formatter = c -> {
+            if (c.img == 0.0) {
+                return Double.toString(c.real);
+            } else if (c.real == 0.0) {
+                return c.img + "i";
             } else {
-                return String.format("%s %s %si", r, i < 0 ? "-" : "+", Math.abs(i));
+                return String.format("%s %s %si", c.real, c.img < 0 ? "-" : "+", Math.abs(c.img));
             }
         };
 

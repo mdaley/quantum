@@ -125,13 +125,16 @@ public class ComplexMatrix {
     }
 
     public String toPrettyString() {
+        return toPrettyString(null);
+    }
+    public String toPrettyString(Function<Complex, String> formatter) {
         String[] cells = new String[rows * columns];
         int len = -1;
 
         int i = 0;
         for (int m = 0; m < rows; m++) {
             for (int n = 0; n < columns; n++) {
-                String cell = values[m][n].toString();
+                String cell = values[m][n].toString(formatter);
                 cells[i++] = cell;
                 len = cell.length() > len ? cell.length() : len;
             }

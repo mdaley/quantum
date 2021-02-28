@@ -4,7 +4,7 @@ import static java.lang.Math.PI;
 import static quantum.complex.ComplexEnvironment.floor;
 
 import java.util.Objects;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * A complex number with double values for the real and imaginary parts.
@@ -176,11 +176,11 @@ public class Complex {
         }
     }
 
-    public String toString(BiFunction<Double, Double, String> formatter) {
+    public String toString(Function<Complex, String> formatter) {
         if (formatter == null) {
             return toString();
         } else {
-            return formatter.apply(real, img);
+            return formatter.apply(this);
         }
     }
 
