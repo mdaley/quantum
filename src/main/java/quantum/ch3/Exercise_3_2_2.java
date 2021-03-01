@@ -61,7 +61,7 @@ public class Exercise_3_2_2 extends Exercise {
                 .collect(Collectors.toList())
                         .toArray(Complex[]::new));
 
-        System.out.println("Initial state:\n\n" + initialState.toPrettyString());
+        System.out.println("\nInitial state:\n\n" + initialState.toPrettyString());
 
         Complex[][] values = new Complex[size][size];
         for (int i = 0; i < size; i++) {
@@ -72,14 +72,14 @@ public class Exercise_3_2_2 extends Exercise {
                     } else {
                         values[i][j] = Complex.ZERO;
                     }
-                } else if (i > 0 && i < 1 + slits) { // slits -> targets rows
+                } else if (i < 1 + slits) { // slits -> targets rows
                     if (j > slits && j < 1 + slits + targets) {
                         values[i][j] = complex(slitsToTargets.get(i - 1)[j - 1 - slits], 0);
                     } else {
                         values[i][j] = Complex.ZERO;
                     }
                 } else {
-                    if (i > slits) {
+                    if (i > slits) { // the targets, where the bullets stay
                         if (j == i) {
                             values[i][j] = Complex.ONE;
                         } else {
@@ -92,6 +92,10 @@ public class Exercise_3_2_2 extends Exercise {
 
         ComplexMatrix stateChanger = complexMatrix(size, size, values).transpose();
 
-        System.out.println("State Changing matrix:\n\n" + stateChanger.toPrettyString());
+        System.out.println("\nState Changing matrix:\n\n" + stateChanger.toPrettyString());
+
+        ComplexMatrix endingState = stateChanger.multiply(stateChanger).multiply(initialState);
+
+        System.out.println("\nEnding state with bullets at targets:\n\n" + endingState.toPrettyString());
     }
 }
