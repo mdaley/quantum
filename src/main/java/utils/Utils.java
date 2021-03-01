@@ -105,4 +105,13 @@ public class Utils {
             }
         }
     }
+
+    public static double inputDouble(String msg) {
+        while(true) {
+            try {
+                return Double.parseDouble(input(msg));
+            } catch (NumberFormatException ignored) {
+            }
+        }
+    }
 }
