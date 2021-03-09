@@ -1,8 +1,10 @@
 package quantum.ch4;
 
-import static utils.Symbols.BRA_KET;
-import static utils.Symbols.BRA_PHI;
-import static utils.Symbols.KET_PSI;
+import static utils.Symbols.PHI;
+import static utils.Symbols.PSI;
+import static utils.Symbols.bra;
+import static utils.Symbols.braKet;
+import static utils.Symbols.ket;
 import static utils.Utils.inputBoolean;
 import static utils.Utils.inputInteger;
 import static utils.Utils.inputMatrix;
@@ -27,7 +29,7 @@ public class Exercise_4_1_1 extends Exercise {
         ComplexMatrix initialKet; // will be a column vector
 
         while (true) {
-            initialKet = inputMatrix("Initial state ket " + KET_PSI + ": ").transpose();
+            initialKet = inputMatrix("Initial state ket " + ket(PSI) + ": ").transpose();
             if (initialKet.columns == 1 && initialKet.rows > 0) {
                 break;
             } else {
@@ -39,7 +41,7 @@ public class Exercise_4_1_1 extends Exercise {
         double squaredNorm = initialKet.scalarMultiply(initialKet.conjugate()).sum().real;
 
         System.out.println("Quantum model has " + initialKet.rows + " state" + (initialKet.rows == 1 ? "" : "s" + "."));
-        System.out.println("Initial quantum state " + KET_PSI + " = \n\n" + initialKet.transpose().toPrettyString());
+        System.out.println("Initial quantum state " + ket(PSI) + " = \n\n" + initialKet.transpose().toPrettyString());
         System.out.println("Norm = " + Math.sqrt(squaredNorm));
 
         do {
@@ -69,7 +71,7 @@ public class Exercise_4_1_1 extends Exercise {
                 ComplexMatrix newKet;
 
                 while (true) {
-                    newKet = inputMatrix("Input the new state " + BRA_PHI + ": ").transpose();
+                    newKet = inputMatrix("Input the new state " + bra(PHI) + ": ").transpose();
 
                     if (newKet.columns == 1 && newKet.rows == initialKet.rows) {
                         break;
@@ -80,9 +82,9 @@ public class Exercise_4_1_1 extends Exercise {
 
                 ComplexMatrix newBra = newKet.adjoint();
 
-                ComplexMatrix transitionProbabiity = newBra.multiply(initialKet);
+                ComplexMatrix transitionProbability = newBra.multiply(initialKet);
 
-                System.out.println("Transition amplitude " + BRA_KET + " = " + transitionProbabiity.toPrettyString());
+                System.out.println("Transition amplitude " + braKet(PHI, PSI) + " = " + transitionProbability.toPrettyString());
             }
         } while(inputBoolean("Again? "));
     }
