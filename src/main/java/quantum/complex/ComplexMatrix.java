@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 
 public class ComplexMatrix {
@@ -53,6 +54,31 @@ public class ComplexMatrix {
         }
 
         return complexMatrix(size, size, data);
+    }
+
+    public static ComplexMatrix diagonalMatrix(Complex[] data) {
+        int size = data.length;
+        Complex[][] values = new Complex[size][size];
+
+        for (int m = 0; m < size; m++) {
+            for (int n = 0; n < size; n++) {
+                values[m][n] = m == n ? data[m] : Complex.ZERO;
+            }
+        }
+
+        return new ComplexMatrix(size, size, values);
+    }
+
+    public static ComplexMatrix diagonalMatrix(String data) {
+        String[] values = data.split("\\|");
+
+        Complex[] complexValues = new Complex[values.length];
+
+        for (int i = 0; i < values.length; i++) {
+            complexValues[i] = complex(values[i]);
+        }
+
+        return diagonalMatrix(complexValues);
     }
 
     public static ComplexMatrix complexMatrix(String data) {
@@ -481,5 +507,118 @@ public class ComplexMatrix {
      */
     public boolean isDoublyStochastic() {
         return isDoublyStochastic(1e-10);
+    }
+
+    public static Complex trace(ComplexMatrix m) {
+        if (!m.isSquare()) {
+            throw new IllegalArgumentException("Can only get trace of a square matrix");
+        }
+
+        double real = 0.0;
+        double img = 0.0;
+
+        for (int i = 0; i < m.rows; i++) {
+            Complex value = m.values[i][i];
+            real += value.real;
+            img += value.img;
+        }
+
+        return complex(real, img);
+    }
+
+    public Complex trace() {
+        return trace(this);
+    }
+
+    public static boolean isDiagonal(ComplexMatrix matrix) {
+        if (!matrix.isSquare()) {
+            return false;
+        }
+
+        for (int m = 0; m < matrix.rows; m++) {
+            for (int n = 0; n < matrix.columns; n++) {
+                if (m != n && !matrix.values[m][n].isZero()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isDiagonal() {
+        return isDiagonal(this);
+    }
+
+    public static Complex determinant(ComplexMatrix matrix) {
+        if (!matrix.isSquare()) {
+            throw new IllegalArgumentException("Can only calculate determinant for a square matrix");
+        }
+
+        if (matrix.isDiagonal()) {
+            Complex det = matrix.values[0][0];
+            for (int i = 1; i < matrix.rows; i++) {
+                det = det.multiply(matrix.values[i][i]);
+            }
+
+            return det;
+        }
+
+        if (matrix.rows == 2) {
+            return matrix.values[0][0].multiply(matrix.values[1][1]).subtract(matrix.values[0][1].multiply(matrix.values[1][0]));
+        } else {
+            Complex det = Complex.ZERO;
+            for (int i = 0; i < matrix.columns; i++) {
+                Complex subDet = determinant(matrix.submatrix(0, i));
+                Complex value = matrix.values[0][i];
+                if (i % 2 == 0) {
+                    det = det.add(subDet.multiply(value));
+                } else {
+                    det = det.subtract(subDet.multiply(value));
+                }
+            }
+
+            return det;
+        }
+    }
+
+    public Complex determinant() {
+        return determinant(this);
+    }
+
+    public static ComplexMatrix submatrix(ComplexMatrix matrix, Set<Integer> rowsToRemove, Set<Integer> columnsToRemove) {
+        int newRows = matrix.rows - rowsToRemove.size();
+        int newColumns = matrix.columns - columnsToRemove.size();
+        Complex[][] newValues = new Complex[newRows][newColumns];
+
+        int p = 0;
+        for (int m = 0; m < matrix.rows; m++) {
+            if (!rowsToRemove.contains(m)) {
+                int q = 0 ;
+                for (int n = 0; n < matrix.columns; n++) {
+                    if (!columnsToRemove.contains(n)) {
+                        newValues[p][q] = matrix.values[m][n];
+
+                        q++;
+                    }
+                }
+
+                p++;
+            }
+        }
+
+        return complexMatrix(newRows, newColumns, newValues);
+    }
+
+    public static ComplexMatrix submatrix(ComplexMatrix matrix, int rowToRemove, int columnToRemove) {
+        return submatrix(matrix, Set.of(rowToRemove), Set.of(columnToRemove));
+    }
+
+    public ComplexMatrix submatrix(Set<Integer> rowsToRemove, Set<Integer> columnsToRemove) {
+        return submatrix(this, rowsToRemove, columnsToRemove);
+    }
+
+    public ComplexMatrix submatrix(int rowToRemove, int columnToRemove) {
+        return submatrix(Set.of(rowToRemove), Set.of(columnToRemove));
     }
 }

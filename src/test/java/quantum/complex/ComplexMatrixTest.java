@@ -9,6 +9,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static quantum.complex.Complex.complex;
 import static quantum.complex.ComplexEnvironment.setFloor;
 import static quantum.complex.ComplexMatrix.complexMatrix;
+import static quantum.complex.ComplexMatrix.diagonalMatrix;
 import static quantum.complex.ComplexMatrix.identityMatrix;
 import static quantum.complex.ComplexMatrix.multiply;
 import static quantum.complex.ComplexMatrix.tensorProduct;
@@ -19,6 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class ComplexMatrixTest {
@@ -216,5 +218,40 @@ public class ComplexMatrixTest {
         ComplexMatrix actual = tensorProduct(complexMatrix(m1), complexMatrix(m2));
         assertEquals(complexMatrix(result), actual);
         System.out.println(actual.toPrettyString());
+    }
+
+    @Test
+    void trace_works_correctly() {
+        assertEquals(complex("5+5i"), complexMatrix("1+i|2|3||3-i|3|4||0|0|1+4i").trace());
+    }
+
+    public static Stream<Arguments> determinants() {
+        return Stream.of(arguments(complex(-4, -3), complexMatrix("2+i|3||3+i|2-i")),
+                arguments(complex("27+6i"), complexMatrix("1+i|2-i|4||6|2|i||-i|1|0")),
+                arguments(complex("-642-715i"), complexMatrix("i|0|1+i|4||0|16|-i|12||0|3+2i|1|0||9-i|12|0|-3i")),
+                arguments(complex("120i"), diagonalMatrix("1|2|3|4|5|i")),
+                arguments(complex("338688 - 193536i"), diagonalMatrix("1|3-i|2|4|6|8|5-i|7|9|1|1")),
+                arguments(Complex.ZERO, diagonalMatrix("1|3-i|2|4|6|8|5-i|7|9|0|1")));
+    }
+
+    @ParameterizedTest
+    @MethodSource("determinants")
+    void determinant_is_calculated_correctly(Complex det, ComplexMatrix m) {
+        assertEquals(det, m.determinant());
+    }
+
+    public static Stream<Arguments> sub_matrices() {
+        return Stream.of(arguments(complexMatrix("1"), complexMatrix("1 | 3 || 2 | 4"), Set.of(1), Set.of(1)),
+                arguments(complexMatrix("1 | 3 || 2 | 4"), complexMatrix("1 | 3 || 2 | 4"), Set.of(), Set.of()),
+                arguments(complexMatrix("5 | 7 || 13 | 15"),
+                        complexMatrix("1 | 2 | 3 | 4 || 5 | 6 | 7 | 8 || 9 | 10 | 11 | 12 || 13 | 14 | 15 | 16"),
+                        Set.of(0, 2), Set.of(1, 3)));
+    }
+
+    @ParameterizedTest
+    @MethodSource("sub_matrices")
+    void sub_matrices_constructed_correctly(ComplexMatrix result, ComplexMatrix source,
+                                           Set<Integer> rowsToRemove, Set<Integer> columnsToRemove) {
+        assertEquals(result, source.submatrix(rowsToRemove, columnsToRemove));
     }
 }

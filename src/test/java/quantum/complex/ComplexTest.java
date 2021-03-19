@@ -10,6 +10,7 @@ import static quantum.complex.ComplexEnvironment.setFloor;
 import static quantum.complex.CustomAsserts.assertClose;
 import static quantum.complex.Polar.polar;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

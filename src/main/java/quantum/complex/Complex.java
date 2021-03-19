@@ -23,8 +23,8 @@ public class Complex {
     private final ComplexMarker marker;
 
     private Complex(double real, double img, ComplexMarker marker) {
-        this.real = floor(real);
-        this.img = floor(img);
+        this.real = fixupMinusZero(floor(real));
+        this.img = fixupMinusZero(floor(img));
         this.marker = marker;
     }
 
@@ -270,5 +270,9 @@ public class Complex {
         } else {
             return Double.parseDouble(part.replace("i", ""));
         }
+    }
+
+    public boolean isZero() {
+        return real == 0.0 && img == 0.0;
     }
 }
