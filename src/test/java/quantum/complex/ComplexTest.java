@@ -71,6 +71,13 @@ public class ComplexTest {
 
     }
 
+    @Test
+    void construction_with_minus_zero_results_in_zero() {
+        Complex complex = complex(-0.0, -0.0);
+        assertEquals(0.0, complex.real);
+        assertEquals(0.0, complex.img);
+    }
+
     private static Stream<Arguments> complex_from_string() {
         return Stream.of(
                 // real only / imaginary only

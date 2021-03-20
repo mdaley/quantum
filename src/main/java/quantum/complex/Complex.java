@@ -23,15 +23,9 @@ public class Complex {
     private final ComplexMarker marker;
 
     private Complex(double real, double img, ComplexMarker marker) {
-        this.real = fixupMinusZero(floor(real));
-        this.img = fixupMinusZero(floor(img));
+        this.real = floor(real);
+        this.img = floor(img);
         this.marker = marker;
-    }
-
-    // let's avoid the problem that Double.equals(0.0, -0.0) doesn't return true! Avoids problem in Complex.equals
-    // where 1.0 + 0.0i != 1.0 - 0.0i.
-    private static double fixupMinusZero(double value) {
-        return value == -0.0 ? 0.0 : value;
     }
 
     public static Complex complex(double real, double img) {
