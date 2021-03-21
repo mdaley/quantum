@@ -69,6 +69,15 @@ public class ComplexMatrix {
         return new ComplexMatrix(size, size, values);
     }
 
+    public static ComplexMatrix diagonalMatrix(Complex value, int size) {
+        Complex[] values = new Complex[size];
+        for (int i = 0; i < size; i++) {
+            values[i] = value;
+        }
+
+        return diagonalMatrix(values);
+    }
+
     public static ComplexMatrix diagonalMatrix(String data) {
         String[] values = data.split("\\|");
 
