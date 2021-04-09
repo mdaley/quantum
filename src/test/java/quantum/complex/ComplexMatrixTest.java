@@ -285,5 +285,7 @@ public class ComplexMatrixTest {
 
         // multiply matrix and inverse and check that result is identity matrix
         assertClose(identityMatrix(input.rows), input.multiply(inverse));
+        // of course the other way round works too
+        assertClose(identityMatrix(input.rows), inverse.multiply(input));
     }
 }

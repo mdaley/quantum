@@ -171,7 +171,7 @@ public class ComplexMatrix {
             for (int n = 0; n < columns; n++) {
                 String cell = values[m][n].toString(formatter);
                 cells[i++] = cell;
-                len = cell.length() > len ? cell.length() : len;
+                len = Math.max(cell.length(), len);
             }
         }
 
@@ -498,7 +498,7 @@ public class ComplexMatrix {
     @Override
     public int hashCode() {
         int result = Objects.hash(rows, columns);
-        result = 31 * result + Arrays.hashCode(values);
+        result = 31 * result + Arrays.deepHashCode(values);
         return result;
     }
 
@@ -649,7 +649,7 @@ public class ComplexMatrix {
             throw new IllegalArgumentException("Both matrices must have the same number of rows");
         }
 
-        Complex values[][] = new Complex[m1.rows][m1.columns + m2.columns];
+        Complex[][] values = new Complex[m1.rows][m1.columns + m2.columns];
 
         for (int m = 0; m < m1.rows; m++) {
             for (int n = 0; n < m1.columns; n++) {
@@ -703,7 +703,7 @@ public class ComplexMatrix {
         }
 
         // collect the result - the inverse matrix - from the right part of the working matrix.
-        Complex result[][] = new Complex[size][size];
+        Complex[][] result = new Complex[size][size];
 
         for (int m = 0; m < size; m++) {
             for (int n = 0; n < size; n++) {
