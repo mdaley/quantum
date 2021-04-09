@@ -270,22 +270,20 @@ public class ComplexMatrixTest {
 
     public static Stream<Arguments> inverse() {
         return Stream.of(
-                arguments(identityMatrix(1), identityMatrix(1)),
-                arguments(identityMatrix(3), identityMatrix(3)),
-                arguments(identityMatrix(20), identityMatrix(20)),
-                arguments(complexMatrix("-0.5 | 0.5 | 0.5 || 0.5 | -0.5 | 0.5 || 0.5 | 0.5 | -0.5"),
-                        complexMatrix("0 | 1 | 1 || 1 | 0 | 1 || 1 | 1 | 0")),
-                arguments(complexMatrix("0.6667 | 1.3333 | 0.5 || 1 | 2 | 0.5 || -3 | -5 | -1"),
-                        complexMatrix("3 | -7 | -2 || -3 | 5 | 1 || 6 | -4 | 0")));
+                arguments(identityMatrix(1)),
+                arguments(identityMatrix(3)),
+                arguments(identityMatrix(20)),
+                arguments(complexMatrix("0 | 1 | 1 || 1 | 0 | 1 || 1 | 1 | 0")),
+                arguments(complexMatrix("3 | -7 | -2 || -3 | 5 | 1 || 6 | -4 | 0")),
+                arguments(complexMatrix("1+i | 2 | 0 | i || 0 | 0 | 2+i | 0 || 3 | 1 | 1 | 2 || 0 | -2i | -i | 2")));
     }
 
     @ParameterizedTest
     @MethodSource("inverse")
-    void inverse_works_correctly(ComplexMatrix expected, ComplexMatrix input) {
+    void inverse_works_correctly(ComplexMatrix input) {
         ComplexMatrix inverse = input.inverse();
-        assertClose(expected, inverse);
 
-        // and then multiply matrix and inverse and check that result is identity matrix
+        // multiply matrix and inverse and check that result is identity matrix
         assertClose(identityMatrix(input.rows), input.multiply(inverse));
     }
 }

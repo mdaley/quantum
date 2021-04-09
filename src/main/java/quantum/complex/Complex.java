@@ -158,6 +158,10 @@ public class Complex {
     public boolean equals(Complex o, double accuracy) {
         if (this == o) return true;
         if (o == null) return false;
+
+        if (!(Math.abs(o.real - real) < accuracy && Math.abs(o.img - img) < accuracy)) {
+            System.out.println("ahha!");
+        }
         return Math.abs(o.real - real) < accuracy && Math.abs(o.img - img) < accuracy;
     }
 

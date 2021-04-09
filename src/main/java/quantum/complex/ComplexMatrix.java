@@ -673,6 +673,7 @@ public class ComplexMatrix {
 
         int size = matrix.rows;
 
+        // build a new matrix with a same size itentity matrix to the right of the matrix to be inverted.
         ComplexMatrix working = concat(matrix, identityMatrix(size));
 
         // run the gaussian elimination process
@@ -691,7 +692,7 @@ public class ComplexMatrix {
             }
         }
 
-        // normalise left part to identity matrix
+        // normalise the left part of the working matrix to identity matrix.
         for (int m = 0; m < size; m++) {
             Complex pivotValue = working.values[m][m];
             for (int n = 0; n < size * 2; n++) {
@@ -701,6 +702,7 @@ public class ComplexMatrix {
             }
         }
 
+        // collect the result - the inverse matrix - from the right part of the working matrix.
         Complex result[][] = new Complex[size][size];
 
         for (int m = 0; m < size; m++) {
@@ -735,7 +737,7 @@ public class ComplexMatrix {
 
             pivotValue = working.values[currentRow][currentRow];
         }
-        
+
         return pivotValue;
     }
 
