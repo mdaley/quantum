@@ -275,7 +275,15 @@ public class ComplexMatrixTest {
                 arguments(identityMatrix(20)),
                 arguments(complexMatrix("0 | 1 | 1 || 1 | 0 | 1 || 1 | 1 | 0")),
                 arguments(complexMatrix("3 | -7 | -2 || -3 | 5 | 1 || 6 | -4 | 0")),
-                arguments(complexMatrix("1+i | 2 | 0 | i || 0 | 0 | 2+i | 0 || 3 | 1 | 1 | 2 || 0 | -2i | -i | 2")));
+                arguments(complexMatrix("1+i | 2 | 0 | i || 0 | 0 | 2+i | 0 || 3 | 1 | 1 | 2 || 0 | -2i | -i | 2")),
+                arguments(complexMatrix("3 + 2i | 1 + 18i | 29 - 11i | 5 - 1i | 19 + 17i | 18 - 40i | 2i | -8 + 6i ||" +
+                                " 26 + 26i | 18 + 12i | -4 + 19i | 52 | 30 - 6i | 15 + 23i | -4 + 20i | 12i ||" +
+                                " 0 | 3 + 2i | -12 + 31i | 0 | 5 - 1i | 19 + 43i | 0 | 2i ||" +
+                                " 0 | 0 | 0 | 12 | 36 + 48i | 60 - 84i | 6 - 3i | 30 + 15i ||" +
+                                " 0 | 0 | 0 | 120 + 24i | 72 | 24 + 60i | 66 - 18i | 36 - 18i ||" +
+                                " 0 | 0 | 0 | 0 | 12 | 24 + 108i | 0 | 6 - 3i ||" +
+                                " 2 | 6 + 8i | 10 - 14i | 4 + 4i | -4 + 28i | 48 - 8i | 9 + 3i | 15 + 45i ||" +
+                                " 20 + 4i | 12 | 4 + 10i | 32 + 48i | 24 + 24i | -12 + 28i | 84 + 48i | 54 + 18i ||")));
     }
 
     @ParameterizedTest
