@@ -288,7 +288,7 @@ public class ComplexMatrix {
         return multiply(this, matrix);
     }
 
-    public void inverseInPlace() {
+    public void negateInPlace() {
         for (int m = 0; m < rows; m++) {
             for (int n = 0; n < columns; n++) {
                 values[m][n] = complex(-values[m][n].real, -values[m][n].img);
@@ -296,9 +296,9 @@ public class ComplexMatrix {
         }
     }
 
-    public ComplexMatrix inverse() {
+    public ComplexMatrix negate() {
         ComplexMatrix result = clone();
-        result.inverseInPlace();
+        result.negateInPlace();
 
         return result;
     }
@@ -387,7 +387,7 @@ public class ComplexMatrix {
 
     /**
      * A matrix is boolean is if only contains ones and zeros.
-     * @return
+     * @return true if matrix is boolean
      */
     public boolean isBoolean() {
         for (int m = 0; m < rows; m++) {
@@ -480,6 +480,19 @@ public class ComplexMatrix {
         if (o == null || (getClass() != o.getClass()) && getClass() != o.getClass().getSuperclass()) return false;
         ComplexMatrix that = (ComplexMatrix) o;
         return rows == that.rows && columns == that.columns && Arrays.deepEquals(values, that.values);
+    }
+
+    public boolean equals(ComplexMatrix o, double accuracy) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (o.rows != rows || o.columns != columns) return false;
+
+        for (int m = 0; m < rows; m++) {
+            for (int n = 0; n < columns; n++) {
+                if (!values[m][n].equals(o.values[m][n], accuracy)) return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -629,5 +642,104 @@ public class ComplexMatrix {
 
     public ComplexMatrix submatrix(int rowToRemove, int columnToRemove) {
         return submatrix(Set.of(rowToRemove), Set.of(columnToRemove));
+    }
+
+    public static ComplexMatrix concat(ComplexMatrix m1, ComplexMatrix m2) {
+        if (m1.rows != m2.rows) {
+            throw new IllegalArgumentException("Both matrices must have the same number of rows");
+        }
+
+        Complex values[][] = new Complex[m1.rows][m1.columns + m2.columns];
+
+        for (int m = 0; m < m1.rows; m++) {
+            for (int n = 0; n < m1.columns; n++) {
+                values[m][n] = m1.values[m][n];
+            }
+
+            for (int p = 0; p < m1.columns; p++) {
+                values[m][p + m1.columns] = m2.values[m][p];
+            }
+        }
+
+        return new ComplexMatrix(m1.rows, m1.columns + m2.columns, values);
+    }
+
+    public static ComplexMatrix inverse(ComplexMatrix matrix) {
+        if (!matrix.isSquare()) {
+            throw new IllegalArgumentException("A non-square matrix does not have an inverse");
+        } else if (matrix.determinant().equals(Complex.ZERO)) {
+            throw new IllegalArgumentException("A matrix with determinant of zero has no inverse");
+        }
+
+        int size = matrix.rows;
+
+        ComplexMatrix working = concat(matrix, identityMatrix(size));
+
+        // run the gaussian elimination process
+        for (int m = 0; m < size; m++) {
+            Complex pivotValue = working.values[m][m];
+
+            pivotValue = rearrangeRowsIfPivotIsZero(working, size, m, pivotValue);
+
+            for (int p = 0; p < size; p++) {
+                if (p != m) {
+                    Complex zeroer = working.values[p][m].divide(pivotValue);
+                    for (int n = 0 ; n < size * 2; n++) {
+                        working.values[p][n] = working.values[p][n].subtract(working.values[m][n].multiply(zeroer));
+                    }
+                }
+            }
+        }
+
+        // normalise left part to identity matrix
+        for (int m = 0; m < size; m++) {
+            Complex pivotValue = working.values[m][m];
+            for (int n = 0; n < size * 2; n++) {
+                if (!pivotValue.equals(Complex.ONE)) {
+                    working.values[m][n] = working.values[m][n].divide(pivotValue);
+                }
+            }
+        }
+
+        Complex result[][] = new Complex[size][size];
+
+        for (int m = 0; m < size; m++) {
+            for (int n = 0; n < size; n++) {
+                result[m][n] = working.values[m][n + size];
+            }
+        }
+
+        return complexMatrix(matrix.rows, matrix.columns, result);
+    }
+
+    private static Complex rearrangeRowsIfPivotIsZero(ComplexMatrix working, int size, int currentRow, Complex pivotValue) {
+        // If the pivot is zero, a lower row can be swapped with the current row if the lower row has a usable non-zero pivot.
+        if (pivotValue.equals(Complex.ZERO)) {
+            int pivotableRow = -1;
+            for (int p = currentRow + 1; p < size; p++) {
+                if (!working.values[p][currentRow].equals(Complex.ZERO)) {
+                    pivotableRow = p;
+                }
+            }
+
+            if (pivotableRow == -1) {
+                throw new RuntimeException("No pivotable value available. Can't determine inverse matrix");
+            }
+
+            // swap rows
+            for (int n = 0; n < size * 2; n++) {
+                Complex save = working.values[currentRow][n];
+                working.values[currentRow][n] = working.values[pivotableRow][n];
+                working.values[pivotableRow][n] = save;
+            }
+
+            pivotValue = working.values[currentRow][currentRow];
+        }
+        
+        return pivotValue;
+    }
+
+    public ComplexMatrix inverse() {
+        return inverse(this);
     }
 }

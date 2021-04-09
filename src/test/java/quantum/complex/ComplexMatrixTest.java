@@ -9,10 +9,12 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static quantum.complex.Complex.complex;
 import static quantum.complex.ComplexEnvironment.setFloor;
 import static quantum.complex.ComplexMatrix.complexMatrix;
+import static quantum.complex.ComplexMatrix.concat;
 import static quantum.complex.ComplexMatrix.diagonalMatrix;
 import static quantum.complex.ComplexMatrix.identityMatrix;
 import static quantum.complex.ComplexMatrix.multiply;
 import static quantum.complex.ComplexMatrix.tensorProduct;
+import static quantum.complex.CustomAsserts.assertClose;
 import static quantum.complex.Polar.polar;
 
 import org.junit.jupiter.api.Test;
@@ -253,5 +255,37 @@ public class ComplexMatrixTest {
     void sub_matrices_constructed_correctly(ComplexMatrix result, ComplexMatrix source,
                                            Set<Integer> rowsToRemove, Set<Integer> columnsToRemove) {
         assertEquals(result, source.submatrix(rowsToRemove, columnsToRemove));
+    }
+
+    public static Stream<Arguments> concatenation() {
+        return Stream.of(arguments("1 | 2", "1", "2"),
+                arguments("1|2|5|6||3|4|7|8", "1|2||3|4", "5|6||7|8"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("concatenation")
+    void concat_works_correctly(String result, String s1, String s2) {
+        assertEquals(complexMatrix(result), concat(complexMatrix(s1), complexMatrix(s2)));
+    }
+
+    public static Stream<Arguments> inverse() {
+        return Stream.of(
+                arguments(identityMatrix(1), identityMatrix(1)),
+                arguments(identityMatrix(3), identityMatrix(3)),
+                arguments(identityMatrix(20), identityMatrix(20)),
+                arguments(complexMatrix("-0.5 | 0.5 | 0.5 || 0.5 | -0.5 | 0.5 || 0.5 | 0.5 | -0.5"),
+                        complexMatrix("0 | 1 | 1 || 1 | 0 | 1 || 1 | 1 | 0")),
+                arguments(complexMatrix("0.6667 | 1.3333 | 0.5 || 1 | 2 | 0.5 || -3 | -5 | -1"),
+                        complexMatrix("3 | -7 | -2 || -3 | 5 | 1 || 6 | -4 | 0")));
+    }
+
+    @ParameterizedTest
+    @MethodSource("inverse")
+    void inverse_works_correctly(ComplexMatrix expected, ComplexMatrix input) {
+        ComplexMatrix inverse = input.inverse();
+        assertClose(expected, inverse);
+
+        // and then multiply matrix and inverse and check that result is identity matrix
+        assertClose(identityMatrix(input.rows), input.multiply(inverse));
     }
 }

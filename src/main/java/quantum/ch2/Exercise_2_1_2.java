@@ -19,7 +19,7 @@ public class Exercise_2_1_2 extends Exercise {
     public void execute() {
         ComplexMatrix m = Utils.inputColumnVector("Column vector: ");
 
-        ComplexMatrix inverse = m.inverse();
+        ComplexMatrix inverse = m.negate();
         System.out.println("Inverse matrix\n");
         System.out.println(inverse.toPrettyString());
         System.out.println("\n");
